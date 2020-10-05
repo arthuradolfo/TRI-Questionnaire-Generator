@@ -27,7 +27,6 @@ class AnswerController extends Controller
     {
         $answer = Answer::findOrFail($id);
         $answer->update($request->all());
-
         return $answer;
     }
 
