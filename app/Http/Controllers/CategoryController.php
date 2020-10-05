@@ -15,7 +15,8 @@ class CategoryController extends Controller
 
     public function show($id)
     {
-        return new CategoryResource(Category::find($id));
+        $category = Category::findOrFail($id);
+        return new CategoryResource($category);
     }
 
     public function store(Request $request)

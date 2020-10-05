@@ -15,7 +15,8 @@ class QuestionController extends Controller
 
     public function show($id)
     {
-        return new QuestionResource(Question::find($id));
+        $question = Question::findOrFail($id);
+        return new QuestionResource($question);
     }
 
     public function store(Request $request)
