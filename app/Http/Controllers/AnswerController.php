@@ -15,7 +15,8 @@ class AnswerController extends Controller
 
     public function show($id)
     {
-        return new AnswerResource(Answer::find($id));
+        $answer = Answer::findOrFail($id);
+        return new AnswerResource($answer);
     }
 
     public function store(Request $request)
