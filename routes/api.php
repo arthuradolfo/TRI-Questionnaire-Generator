@@ -35,29 +35,8 @@ Route::post('questions', 'App\Http\Controllers\QuestionController@store');
 Route::put('questions/{id}', 'App\Http\Controllers\QuestionController@update');
 Route::delete('questions/{id}', 'App\Http\Controllers\QuestionController@delete');
 
-Route::get('categories', function() {
-    // If the Content-Type and Accept headers are set to 'application/json',
-    // this will return a JSON structure. This will be cleaned up later.
-    return CategoryResource::collection(Category::all());
-});
-
-Route::get('categories/{id}', function($id) {
-    return new CategoryResource(Category::find($id));
-});
-
-Route::post('categories', function(Request $request) {
-    return Category::create($request->all);
-});
-
-Route::put('categories/{id}', function(Request $request, $id) {
-    $category = Category::findOrFail($id);
-    $category->update($request->all());
-
-    return $category;
-});
-
-Route::delete('categories/{id}', function($id) {
-    Category::find($id)->delete();
-
-    return 204;
-});
+Route::get('categories', 'App\Http\Controllers\CategoryController@index');
+Route::get('categories/{id}', 'App\Http\Controllers\CategoryController@show');
+Route::post('categories', 'App\Http\Controllers\CategoryController@store');
+Route::put('categories/{id}', 'App\Http\Controllers\CategoryController@update');
+Route::delete('categories/{id}', 'App\Http\Controllers\CategoryController@delete');
