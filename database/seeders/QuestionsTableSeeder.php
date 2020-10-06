@@ -22,6 +22,7 @@ class QuestionsTableSeeder extends Seeder
         Question::create([
             'id' => '91b0106b-4280-4162-9797-d1b429236c7c',
             'category_id' => '91b0106b-4280-4162-9797-d1b423236c7c',
+            'user_id' => '91b35879-c5b1-4876-a50f-e37a79a98cbb',
             'type' => $faker->name,
             'name' => $faker->name,
             'questiontext' => $faker->text,

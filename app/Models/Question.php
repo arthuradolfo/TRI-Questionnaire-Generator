@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\CategoryId;
 use App\Traits\Uuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model
 {
-    use HasFactory, Uuid;
+    use HasFactory, Uuid, CategoryId;
 
     /**
      * The attributes that are mass assignable.
@@ -18,6 +19,7 @@ class Question extends Model
     protected $fillable = [
         'id',
         'category_id',
+        'user_id',
         'type',
         'name',
         'questiontext',
