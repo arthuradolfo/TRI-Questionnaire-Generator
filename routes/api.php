@@ -24,6 +24,8 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     // public routes
     Route::post('/login', 'App\Http\Controllers\Auth\ApiAuthController@login')->name('login.api');
     Route::post('/register','App\Http\Controllers\Auth\ApiAuthController@register')->name('register.api');
+    Route::post('/forgot', 'App\Http\Controllers\Auth\ForgotPasswordController@sendResetLinkEmail')->name('forgot.api');
+    Route::post('/reset', 'App\Http\Controllers\Auth\ResetPasswordController@reset')->name('reset.api');
 });
 
 Route::middleware('auth:api')->group(function() {
