@@ -20,6 +20,11 @@ class CreateAnswersTable extends Migration
                 ->on('questions')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->foreignUuid('user_id')
+                ->references('id')
+                ->on('users')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->integer('fraction');
             $table->string('format');
             $table->string('text');

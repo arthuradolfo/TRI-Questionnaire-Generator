@@ -20,6 +20,11 @@ class CreateQuestionsTable extends Migration
                 ->on('categories')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->foreignUuid('user_id')
+                ->references('id')
+                ->on('users')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->string('type');
             $table->string('name');
             $table->string('questiontext');

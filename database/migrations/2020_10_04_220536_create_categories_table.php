@@ -15,6 +15,11 @@ class CreateCategoriesTable extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->foreignUuid('user_id')
+                ->references('id')
+                ->on('users')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->string('name');
             $table->string('info');
             $table->string('info_format');
