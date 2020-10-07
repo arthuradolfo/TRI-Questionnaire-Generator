@@ -17,6 +17,8 @@ class AnswersTableSeeder extends Seeder
     public function run()
     {
 
+        Answer::query()->delete();
+
         $faker = Factory::create();
 
         Answer::create([

@@ -18,6 +18,8 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
 
+        User::query()->delete();
+
         $faker = Factory::create();
 
         // Let's make sure everyone has the same password and
