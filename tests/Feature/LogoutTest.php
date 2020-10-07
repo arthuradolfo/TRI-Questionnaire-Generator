@@ -9,7 +9,7 @@ class LogoutTest extends TestCase
 {
     public function testLogoutSuccessful()
     {
-        $user = User::factory()->create([
+        User::factory()->create([
             'email' => 'test@user.com',
             'password' => bcrypt('password'),
         ]);

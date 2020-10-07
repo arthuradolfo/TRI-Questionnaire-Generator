@@ -48,8 +48,8 @@ jobs:
       - name: Fix code coverage paths for Sonar
         working-directory: ./build/reports/
         run: |
-          sed -i 's/\/home\/runner\/work\/arthuradolfo\/TRI-Questionnaire-Generator\//\/github\/workspace\//g' phpunit.xml
-          sed -i 's/\/home\/runner\/work\/arthuradolfo\/TRI-Questionnaire-Generator\//\/github\/workspace\//g' phpunit.coverage.xml
+          sed -i 's/\/home\/runner\/work\/TRI-Questionnaire-Generator\/TRI-Questionnaire-Generator\//\/github\/workspace\//g' phpunit.xml
+          sed -i 's/\/home\/runner\/work\/TRI-Questionnaire-Generator\/TRI-Questionnaire-Generator\//\/github\/workspace\//g' phpunit.coverage.xml
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:

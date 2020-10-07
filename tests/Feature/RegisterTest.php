@@ -26,7 +26,7 @@ class RegisterTest extends TestCase
 
     public function testEmailAlreadyTaken()
     {
-        $user = User::factory()->create([
+        User::factory()->create([
             'email' => 'test@user.com',
             'password' => bcrypt('password'),
         ]);

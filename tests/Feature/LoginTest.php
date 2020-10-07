@@ -20,7 +20,7 @@ class LoginTest extends TestCase
 
     public function testUserLoginsSuccessfully()
     {
-        $user = User::factory()->create([
+        User::factory()->create([
             'email' => 'test@user.com',
             'password' => bcrypt('password'),
         ]);
