@@ -17,7 +17,8 @@
         "laravel/passport": "^10.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.0",
-        "ramsey/uuid": "^4.1"
+        "ramsey/uuid": "^4.1",
+        "ext-json": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.3.6",
@@ -59,7 +60,12 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
-            "@php artisan key:generate --ansi"
+            "@php artisan key:generate --ansi",
+            "@php artisan db:seed",
+            "@php artisan passport:install"
+        ],
+        "test" : [
+            "vendor/bin/phpunit"
         ]
     }
 }

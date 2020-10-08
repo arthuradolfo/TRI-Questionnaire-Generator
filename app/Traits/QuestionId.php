@@ -10,7 +10,10 @@ trait QuestionId
     {
         static::creating(function ($model) {
             $question = Question::findOrFail($model->question_id);
-            if($question->user_id != $model->user_id) abort(401,"Question ID does not exist for this user.");
+            if($question->user_id != $model->user_id)
+            {
+                abort(401,"Question ID does not exist for this user.");
+            }
         });
     }
 }

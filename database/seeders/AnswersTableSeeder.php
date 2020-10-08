@@ -17,9 +17,12 @@ class AnswersTableSeeder extends Seeder
     public function run()
     {
 
+        Answer::query()->delete();
+
         $faker = Factory::create();
 
         Answer::create([
+            'id' => '91b0106b-4280-4162-9797-d1b429236c7f',
             'question_id' => '91b0106b-4280-4162-9797-d1b429236c7c',
             'user_id' => '91b35879-c5b1-4876-a50f-e37a79a98cbb',
             'fraction' => 100,

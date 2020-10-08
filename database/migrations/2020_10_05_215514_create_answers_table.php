@@ -28,7 +28,7 @@ class CreateAnswersTable extends Migration
             $table->integer('fraction');
             $table->string('format');
             $table->string('text');
-            $table->string('feedback');
+            $table->string('feedback')->nullable();
             $table->string('feedback_format');
             $table->timestamps();
         });

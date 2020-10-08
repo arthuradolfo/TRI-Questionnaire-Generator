@@ -16,6 +16,8 @@ class CategoriesTableSeeder extends Seeder
     public function run()
     {
 
+        Category::query()->delete();
+
         $faker = Factory::create();
 
         Category::create([

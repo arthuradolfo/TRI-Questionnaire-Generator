@@ -9,7 +9,10 @@ trait Uuid
     public static function bootUuid()
     {
         static::creating(function ($model) {
-            if(is_null($model->id)) $model->id = Str::orderedUuid();
+            if(is_null($model->id))
+            {
+                $model->id = Str::orderedUuid();
+            }
         });
     }
 }

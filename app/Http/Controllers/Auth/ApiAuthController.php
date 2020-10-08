@@ -12,10 +12,11 @@ use Illuminate\Support\Str;
 class ApiAuthController extends Controller
 {
     public function register (Request $request) {
+        $string_validate_rule = 'required|string|max:255';
         $validator = Validator::make($request->all(), [
-            'username' => 'required|string|max:255',
-            'firstname' => 'required|string|max:255',
-            'lastname' => 'required|string|max:255',
+            'username' => $string_validate_rule,
+            'firstname' => $string_validate_rule,
+            'lastname' => $string_validate_rule,
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:5|confirmed',
         ]);
@@ -45,20 +46,22 @@ class ApiAuthController extends Controller
             if (Hash::check($request->password, $user->password)) {
                 $token = $user->createToken('Laravel Password Grant Client')->accessToken;
                 $response = ['token' => $token];
-                return response($response, 200);
+                $status = 200;
             } else {
                 $response = ["message" => "Password mismatch"];
-                return response($response, 422);
+                $status = 422;
             }
         } else {
             $response = ["message" =>'User does not exist'];
-            return response($response, 422);
+            $status = 422;
         }
+        return response($response, $status);
     }
 
     public function logout (Request $request) {
         $token = $request->user()->token();
         $token->revoke();
+
         $response = ['message' => 'You have been successfully logged out!'];
         return response($response, 200);
     }

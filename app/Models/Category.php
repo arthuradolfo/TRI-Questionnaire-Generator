@@ -10,6 +10,8 @@ class Category extends Model
 {
     use HasFactory, Uuid;
 
+    public $incrementing = false;
+
     /**
      * The attributes that are mass assignable.
      *
