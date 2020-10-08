@@ -49,6 +49,6 @@ class CategoryController extends Controller
         $category = Category::where([['id', $id], ['user_id', $request->user()->id]])->firstOrFail();
         $category->delete();
 
-        return 204;
+        return response(json_encode(['message' => 'Deleted.']), 204);
     }
 }

@@ -48,6 +48,6 @@ class AnswerController extends Controller
         $answer = Answer::where([['id', $id], ['user_id', $request->user()->id]])->firstOrFail();
         $answer->delete();
 
-        return 204;
+        return response('', 204);
     }
 }
