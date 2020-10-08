@@ -18,6 +18,8 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
 
+        User::query()->delete();
+
         $faker = Factory::create();
 
         // Let's make sure everyone has the same password and
@@ -29,6 +31,16 @@ class UsersTableSeeder extends Seeder
             'id' => '91b35879-c5b1-4876-a50f-e37a79a98cbb',
             'username' => 'admin',
             'email' => 'admin@test.com',
+            'firstname' => 'Admin',
+            'lastname' => 'Test',
+            'idnumber' => '12',
+            'password' => $password,
+        ]);
+
+        User::create([
+            'id' => '91b35879-c5b1-4876-a50f-e37a79a97cbb',
+            'username' => 'admin',
+            'email' => 'admin1@test.com',
             'firstname' => 'Admin',
             'lastname' => 'Test',
             'idnumber' => '12',

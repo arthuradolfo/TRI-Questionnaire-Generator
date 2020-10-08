@@ -11,6 +11,8 @@ class Question extends Model
 {
     use HasFactory, Uuid, CategoryId;
 
+    public $incrementing = false;
+
     /**
      * The attributes that are mass assignable.
      *

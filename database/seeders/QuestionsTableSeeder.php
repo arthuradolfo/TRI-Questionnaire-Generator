@@ -17,6 +17,8 @@ class QuestionsTableSeeder extends Seeder
     public function run()
     {
 
+        Question::query()->delete();
+
         $faker = Factory::create();
 
         Question::create([

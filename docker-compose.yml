@@ -8,6 +8,8 @@ services:
       - MARIADB_USER=my_user
       - MARIADB_DATABASE=my_database
       - MARIADB_PASSWORD=my_password
+    ports:
+      - 3306:3306
 
   myapp:
     tty: true
@@ -23,4 +25,5 @@ services:
       - 3000:3000
     volumes:
       - ./:/app
+      - ./php.ini:/opt/bitnami/php/conf/php.ini
     # privileged: true # Privileged mode could be required to run this container under Windows

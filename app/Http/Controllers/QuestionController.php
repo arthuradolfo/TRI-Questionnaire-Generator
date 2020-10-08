@@ -49,6 +49,6 @@ class QuestionController extends Controller
         $question = Question::where([['id', $id], ['user_id', $request->user()->id]])->firstOrFail();
         $question->delete();
 
-        return 204;
+        return response(json_encode(['message' => 'Deleted.']), 204);
     }
 }
