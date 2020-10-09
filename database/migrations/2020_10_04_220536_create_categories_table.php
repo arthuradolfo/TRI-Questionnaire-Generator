@@ -23,8 +23,16 @@ class CreateCategoriesTable extends Migration
             $table->string('name');
             $table->string('info');
             $table->string('info_format');
-            $table->integer('idnumber')->nullable();
+            $table->uuid('category_id')->index()->nullable();
             $table->timestamps();
+        });
+
+        Schema::table('categories', function($table) {
+            $table->foreign('category_id')
+                ->references('id')
+                ->on('categories')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
         });
     }
 
