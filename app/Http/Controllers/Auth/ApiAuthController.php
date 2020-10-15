@@ -58,6 +58,22 @@ class ApiAuthController extends Controller
         return response($response, $status);
     }
 
+    public function update (Request $request) {
+        $validator = Validator::make($request->all(), [
+            'new_password' => 'required|string|min:5|confirmed',
+        ]);
+        if ($validator->fails())
+        {
+            return response(['errors'=>$validator->errors()->all()], 422);
+        }
+        $request->user()->password = Hash::make($request->new_password);
+        $request->user()->save();
+        $token = $request->user()->createToken('Laravel Password Grant Client')->accessToken;
+        $response = ['token' => $token];
+        $status = 200;
+        return response($response, $status);
+    }
+
     public function logout (Request $request) {
         $token = $request->user()->token();
         $token->revoke();
