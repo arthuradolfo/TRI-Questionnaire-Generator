@@ -103,7 +103,6 @@ class CategoryTest extends TestCase
             'name',
             'info',
             'info_format',
-            'idnumber',
         ]);
     }
 
@@ -154,7 +153,6 @@ class CategoryTest extends TestCase
             'name',
             'info',
             'info_format',
-            'idnumber',
         ]);
 
         $id = $response->json('id');
@@ -206,7 +204,6 @@ class CategoryTest extends TestCase
             'name',
             'info',
             'info_format',
-            'idnumber',
         ]);
         $response->assertJsonFragment([
             'name' => 'Category Updated'
