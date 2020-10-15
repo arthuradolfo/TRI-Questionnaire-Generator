@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\CategoryId;
 use App\Traits\Uuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    use HasFactory, Uuid;
+    use HasFactory, Uuid, CategoryId;
 
     public $incrementing = false;
 
@@ -23,7 +24,7 @@ class Category extends Model
         'name',
         'info',
         'info_format',
-        'idnumber',
+        'category_id',
     ];
 
     /**
@@ -34,7 +35,7 @@ class Category extends Model
     protected $attributes = [
         'info' => '',
         'info_format' => 'html',
-        'idnumber' => NULL
+        'category_id' => NULL,
     ];
 
     /**

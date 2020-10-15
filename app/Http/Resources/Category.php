@@ -23,6 +23,7 @@ class Category extends JsonResource
             'info_format' => $this->info_format,
             'idnumer' => $this->idnumber,
             'questions' => QuestionResource::collection(Question::where('category_id', $this->id)->get()),
+            'categories' => Category::collection(Category::where('category_id', $this->id)->get()),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
