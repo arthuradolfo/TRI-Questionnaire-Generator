@@ -33,6 +33,8 @@ Route::middleware('auth:api')->group(function() {
         return $request->user();
     });
 
+    Route::post('/password', 'Auth\ApiAuthController@update')->name('update.api');
+
     Route::post('/logout', 'Auth\ApiAuthController@logout')->name('logout.api');
 
     Route::get('answers', 'AnswerController@index');

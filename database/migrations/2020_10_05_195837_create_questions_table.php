@@ -34,7 +34,7 @@ class CreateQuestionsTable extends Migration
             $table->float('defaultgrade');
             $table->float('penalty');
             $table->integer('hidden');
-            $table->integer('idnumber')->nullable();
+            $table->string('idnumber')->nullable();
             $table->boolean('single');
             $table->boolean('shuffleanswers');
             $table->string('answernumbering')->nullable();

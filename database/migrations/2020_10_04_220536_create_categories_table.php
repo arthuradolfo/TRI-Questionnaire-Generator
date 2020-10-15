@@ -23,7 +23,7 @@ class CreateCategoriesTable extends Migration
             $table->string('name');
             $table->string('info');
             $table->string('info_format');
-            $table->integer('idnumber')->nullable();
+            $table->string('idnumber')->nullable();
             $table->timestamps();
         });
     }
