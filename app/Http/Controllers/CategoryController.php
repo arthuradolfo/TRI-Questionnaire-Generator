@@ -24,12 +24,20 @@ class CategoryController extends Controller
         $aux_request = $request->all();
         if(isset($aux_request['name'])) {
             $aux_request['user_id'] = $request->user()->id;
+            if(isset($aux_request['category_moodle_id'])) {
+                $category = Category::where([['moodle_id', $aux_request['category_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
+                $aux_request['category_id'] = $category->id;
+            }
             return Category::create($aux_request);
         }
         else {
             $categories = array();
             foreach ($aux_request as $one_request) {
                 $one_request['user_id'] = $request->user()->id;
+                if(isset($one_request['category_moodle_id'])) {
+                    $category = Category::where([['moodle_id', $one_request['category_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
+                    $one_request['category_id'] = $category->id;
+                }
                 $categories[] = Category::create($one_request);
             }
             return $categories;

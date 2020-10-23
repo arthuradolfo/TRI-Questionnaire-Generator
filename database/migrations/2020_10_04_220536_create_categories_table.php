@@ -15,6 +15,7 @@ class CreateCategoriesTable extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->bigInteger('moodle_id')->nullable();
             $table->foreignUuid('user_id')
                 ->references('id')
                 ->on('users')
