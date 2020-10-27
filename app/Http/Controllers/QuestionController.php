@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\Question as QuestionResource;
 use App\Models\Question;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class QuestionController extends Controller
@@ -24,12 +25,20 @@ class QuestionController extends Controller
         $aux_request = $request->all();
         if(isset($aux_request['category_id'])) {
             $aux_request['user_id'] = $request->user()->id;
+            if(isset($aux_request['category_moodle_id'])) {
+                $category = Category::where([['moodle_id', $aux_request['category_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
+                $aux_request['category_id'] = $category->id;
+            }
             return Question::create($aux_request);
         }
         else {
             $questions = array();
             foreach ($aux_request as $one_request) {
                 $one_request['user_id'] = $request->user()->id;
+                if(isset($one_request['category_moodle_id'])) {
+                    $category = Category::where([['moodle_id', $one_request['category_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
+                    $one_request['category_id'] = $category->id;
+                }
                 $questions[] = Question::create($one_request);
             }
             return $questions;

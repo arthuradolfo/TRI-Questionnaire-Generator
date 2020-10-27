@@ -20,6 +20,7 @@ class Question extends JsonResource
     {
         return [
             'id' => $this->id,
+            'moodle_id' => $this->moodle_id,
             'category_id' => $this->category_id,
             'type' => $this->type,
             'name' => $this->name,

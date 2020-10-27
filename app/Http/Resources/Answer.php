@@ -18,6 +18,7 @@ class Answer extends JsonResource
     {
         return [
             'id' => $this->id,
+            'moodle_id' => $this->moodle_id,
             'question_id' => $this->question_id,
             'fraction' => $this->fraction,
             'format' => $this->format,

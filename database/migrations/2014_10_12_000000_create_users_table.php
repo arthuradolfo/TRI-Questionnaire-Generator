@@ -15,6 +15,7 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
+            $table->bigInteger('moodle_id')->nullable();
             $table->string('username');
             $table->string('email')->unique();
             $table->string('firstname');

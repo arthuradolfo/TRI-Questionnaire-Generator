@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\Answer as AnswerResource;
 use App\Models\Answer;
+use App\Models\Question;
 use Illuminate\Http\Request;
 
 class AnswerController extends Controller
@@ -24,12 +25,20 @@ class AnswerController extends Controller
         $aux_request = $request->all();
         if(isset($aux_request['question_id'])) {
             $aux_request['user_id'] = $request->user()->id;
+            if(isset($aux_request['question_moodle_id'])) {
+                $question = Question::where([['moodle_id', $aux_request['question_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
+                $aux_request['question_id'] = $question->id;
+            }
             return Answer::create($aux_request);
         }
         else {
             $answers = array();
             foreach ($aux_request as $one_request) {
                 $one_request['user_id'] = $request->user()->id;
+                if(isset($one_request['question_moodle_id'])) {
+                    $question = Question::where([['moodle_id', $one_request['question_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
+                    $one_request['question_id'] = $question->id;
+                }
                 $answers[] = Answer::create($one_request);
             }
             return $answers;
