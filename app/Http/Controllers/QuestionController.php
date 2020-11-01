@@ -36,13 +36,13 @@ class QuestionController extends Controller
     public function store(Request $request)
     {
         $aux_request = $request->all();
-        if(isset($aux_request['category_id'])) {
+        if(isset($aux_request['name'])) {
             $aux_request['user_id'] = $request->user()->id;
-            if(Question::where([
+            if(!is_null($aux_request['moodle_id']) && Question::where([
                 ['moodle_id', $aux_request['moodle_id']],
                 ['user_id', $aux_request['user_id']]
             ])->first()) {
-                return new HttpException(401, "Already exists.");
+                throw new HttpException(401, "Already exists.");
             }
             if(isset($aux_request['category_moodle_id'])) {
                 $category = Category::where([['moodle_id', $aux_request['category_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
@@ -54,11 +54,11 @@ class QuestionController extends Controller
             $questions = array();
             foreach ($aux_request as $one_request) {
                 $one_request['user_id'] = $request->user()->id;
-                if(Question::where([
+                if(!is_null($one_request['moodle_id']) && Question::where([
                     ['moodle_id', $one_request['moodle_id']],
                     ['user_id', $one_request['user_id']]
                 ])->first()) {
-                    return new HttpException(401, "Already exists.");
+                    throw new HttpException(401, "Already exists.");
                 }
                 if(isset($one_request['category_moodle_id'])) {
                     $category = Category::where([['moodle_id', $one_request['category_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();

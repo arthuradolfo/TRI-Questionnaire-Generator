@@ -25,6 +25,7 @@ class CategoriesTableSeeder extends Seeder
             'user_id' => '91b35879-c5b1-4876-a50f-e37a79a98cbb',
             'name' => $faker->name,
             'info' => $faker->text,
+            'moodle_id' => 2,
         ]);
 
         Category::create([
