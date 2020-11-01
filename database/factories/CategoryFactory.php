@@ -25,7 +25,7 @@ class CategoryFactory extends Factory
             'name' => $this->faker->name,
             'info' => $this->faker->text,
             'info_format' => 'html',
-            'parent' => NULL,
+            'category_id' => NULL,
         ];
     }
 }

@@ -15,6 +15,7 @@ class CreateAnswersTable extends Migration
     {
         Schema::create('answers', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->bigInteger('moodle_id')->nullable();
             $table->foreignUuid('question_id')
                 ->references('id')
                 ->on('questions')

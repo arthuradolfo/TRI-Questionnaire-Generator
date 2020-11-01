@@ -20,6 +20,7 @@ class Answer extends Model
      */
     protected $fillable = [
         'id',
+        'moodle_id',
         'question_id',
         'user_id',
         'fraction',
@@ -35,6 +36,7 @@ class Answer extends Model
      * @var array
      */
     protected $attributes = [
+        'moodle_id' => NULL,
         'format' => 'html',
         'text' => '',
         'feedback' => '',

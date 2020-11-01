@@ -15,6 +15,7 @@ class CreateQuestionsTable extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->bigInteger('moodle_id')->nullable();
             $table->foreignUuid('category_id')
                 ->references('id')
                 ->on('categories')
@@ -27,18 +28,18 @@ class CreateQuestionsTable extends Migration
                 ->cascadeOnDelete();
             $table->string('type');
             $table->string('name');
-            $table->string('questiontext');
+            $table->longText('questiontext');
             $table->string('questiontext_format');
             $table->string('generalfeedback')->nullable();
             $table->string('generalfeedback_format')->nullable();
-            $table->float('defaultgrade');
-            $table->float('penalty');
-            $table->integer('hidden');
+            $table->float('defaultgrade')->nullable();
+            $table->float('penalty')->nullable();
+            $table->integer('hidden')->nullable();
             $table->string('idnumber')->nullable();
-            $table->boolean('single');
-            $table->boolean('shuffleanswers');
+            $table->boolean('single')->nullable();
+            $table->boolean('shuffleanswers')->nullable();
             $table->string('answernumbering')->nullable();
-            $table->integer('showstandardinstruction');
+            $table->integer('showstandardinstruction')->nullable();
             $table->string('correctfeedback')->nullable();
             $table->string('correctfeedback_format')->nullable();
             $table->string('partiallycorrectfeedback')->nullable();

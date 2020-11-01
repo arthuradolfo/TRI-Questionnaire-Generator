@@ -22,6 +22,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'id',
+        'moodle_id',
         'username',
         'email',
         'firstname',
@@ -48,6 +49,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $attributes = [
+        'moodle_id' => NULL,
         'idnumber' => NULL,
         'institution' => '',
         'department' => '',

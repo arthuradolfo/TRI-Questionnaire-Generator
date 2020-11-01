@@ -20,6 +20,7 @@ class Category extends Model
      */
     protected $fillable = [
         'id',
+        'moodle_id',
         'user_id',
         'name',
         'info',
@@ -33,6 +34,7 @@ class Category extends Model
      * @var array
      */
     protected $attributes = [
+        'moodle_id' => NULL,
         'info' => '',
         'info_format' => 'html',
         'category_id' => NULL,

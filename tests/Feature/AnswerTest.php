@@ -300,4 +300,117 @@ class AnswerTest extends TestCase
             'error' => 'Resource not found'
         ]);
     }
+
+    public function testCreateAnswerWithCategoryMoodleIDSuccessfully()
+    {
+        $this->getToken();
+
+        $answer = Answer::factory()->make([
+            'question_moodle_id' => 2,
+        ]);
+
+        $response = $this->postJson('api/answers', $answer->toArray(),
+            ['Authorization' => 'Bearer '.$this->token]);
+        $response->assertStatus(201);
+        $response->assertJsonStructure([
+            'id',
+            'question_id',
+            'fraction',
+            'format',
+            'text',
+            'feedback',
+            'feedback_format',
+            'created_at',
+            'updated_at'
+        ]);
+    }
+
+    public function testCreateAnswerWithMoodleIdAlreadyExistsFailed()
+    {
+        $this->getToken();
+
+        $answer = Answer::factory()->make([
+            'question_moodle_id' => 2,
+            'moodle_id' => 1,
+        ]);
+
+        $response = $this->postJson('api/answers', $answer->toArray(),
+            ['Authorization' => 'Bearer '.$this->token]);
+        $response->assertStatus(201);
+        $response->assertJsonStructure([
+            'id',
+            'question_id',
+            'fraction',
+            'format',
+            'text',
+            'feedback',
+            'feedback_format',
+            'created_at',
+            'updated_at'
+        ]);
+
+        $answer = Answer::factory()->make([
+            'question_moodle_id' => 2,
+            'moodle_id' => 1,
+        ]);
+
+        $response = $this->postJson('api/answers', $answer->toArray(),
+            ['Authorization' => 'Bearer '.$this->token]);
+        $response->assertStatus(401);
+        $response->assertJsonStructure([
+            'error',
+        ]);
+    }
+
+    public function testCreateAnswersWithCategoryMoodleIdSuccessfully()
+    {
+        $this->getToken();
+
+        $answer_1 = Answer::factory()->make([
+            'question_moodle_id' => 2,
+        ]);
+
+        $answer_2 = Answer::factory()->make([
+            'question_moodle_id' => 2,
+        ]);
+
+        $response = $this->postJson('api/answers', [$answer_1->toArray(), $answer_2->toArray()],
+            ['Authorization' => 'Bearer '.$this->token]);
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            [
+                'id',
+                'question_id',
+                'fraction',
+                'format',
+                'text',
+                'feedback',
+                'feedback_format',
+                'created_at',
+                'updated_at'
+            ]
+        ]);
+    }
+
+    public function testCreateAnswersWithMoodleIdAlreadyExistsFailed()
+    {
+        $this->getToken();
+
+        $answer_1 = Answer::factory()->make([
+            'question_moodle_id' => 2,
+            'moodle_id' => 1,
+        ]);
+
+        $answer_2 = Answer::factory()->make([
+            'question_moodle_id' => 2,
+            'moodle_id' => 1,
+        ]);
+
+        $response = $this->postJson('api/answers', [$answer_1->toArray(), $answer_2->toArray()],
+            ['Authorization' => 'Bearer '.$this->token]);
+        $response->assertStatus(401);
+        $response->assertJsonStructure([
+            'error',
+        ]);
+    }
 }

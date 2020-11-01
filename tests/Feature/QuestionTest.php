@@ -392,4 +392,156 @@ class QuestionTest extends TestCase
             'error' => 'Resource not found'
         ]);
     }
+
+    public function testCreateQuestionWithCategoryMoodleIDSuccessfully()
+    {
+        $this->getToken();
+
+        $question = Question::factory()->make([
+            'category_moodle_id' => 2,
+        ]);
+
+        $response = $this->postJson('api/questions', $question->toArray(),
+            ['Authorization' => 'Bearer '.$this->token]);
+        $response->assertStatus(201);
+        $response->assertJsonStructure([
+            'id',
+            'category_id',
+            'type',
+            'name',
+            'questiontext',
+            'questiontext_format',
+            'generalfeedback',
+            'generalfeedback_format',
+            'defaultgrade',
+            'penalty',
+            'hidden',
+            'idnumber',
+            'single',
+            'shuffleanswers',
+            'answernumbering',
+            'showstandardinstruction',
+            'correctfeedback',
+            'correctfeedback_format',
+            'partiallycorrectfeedback',
+            'partiallycorrectfeedback_format',
+            'incorrectfeedback',
+            'incorrectfeedback_format'
+        ]);
+    }
+
+    public function testCreateQuestionWithMoodleIdAlreadyExistsFailed()
+    {
+        $this->getToken();
+
+        $question = Question::factory()->make([
+            'category_id' => '91b0106b-4280-4162-9797-d1b423236c7c',
+            'moodle_id' => 1,
+        ]);
+
+        $response = $this->postJson('api/questions', $question->toArray(),
+            ['Authorization' => 'Bearer '.$this->token]);
+        $response->assertStatus(201);
+        $response->assertJsonStructure([
+            'id',
+            'category_id',
+            'type',
+            'name',
+            'questiontext',
+            'questiontext_format',
+            'generalfeedback',
+            'generalfeedback_format',
+            'defaultgrade',
+            'penalty',
+            'hidden',
+            'idnumber',
+            'single',
+            'shuffleanswers',
+            'answernumbering',
+            'showstandardinstruction',
+            'correctfeedback',
+            'correctfeedback_format',
+            'partiallycorrectfeedback',
+            'partiallycorrectfeedback_format',
+            'incorrectfeedback',
+            'incorrectfeedback_format'
+        ]);
+
+        $question = Question::factory()->make([
+            'category_id' => '91b0106b-4280-4162-9797-d1b423236c7c',
+            'moodle_id' => 1,
+        ]);
+
+        $response = $this->postJson('api/questions', $question->toArray(),
+            ['Authorization' => 'Bearer '.$this->token]);
+        $response->assertStatus(401);
+        $response->assertJsonStructure([
+            'error',
+        ]);
+    }
+
+    public function testCreateQuestionsWithCategoryMoodleIdSuccessfully()
+    {
+        $this->getToken();
+
+        $question_1 = Question::factory()->make([
+            'category_moodle_id' => 2,
+        ]);
+
+        $question_2 = Question::factory()->make([
+            'category_moodle_id' => 2,
+        ]);
+
+        $response = $this->postJson('api/questions', [$question_1->toArray(), $question_2->toArray()],
+            ['Authorization' => 'Bearer '.$this->token]);
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            [
+                'id',
+                'category_id',
+                'type',
+                'name',
+                'questiontext',
+                'questiontext_format',
+                'generalfeedback',
+                'generalfeedback_format',
+                'defaultgrade',
+                'penalty',
+                'hidden',
+                'idnumber',
+                'single',
+                'shuffleanswers',
+                'answernumbering',
+                'showstandardinstruction',
+                'correctfeedback',
+                'correctfeedback_format',
+                'partiallycorrectfeedback',
+                'partiallycorrectfeedback_format',
+                'incorrectfeedback',
+                'incorrectfeedback_format'
+            ]
+        ]);
+    }
+
+    public function testCreateQuestionsWithMoodleIdAlreadyExistsFailed()
+    {
+        $this->getToken();
+
+        $question_1 = Question::factory()->make([
+            'category_moodle_id' => 2,
+            'moodle_id' => 1,
+        ]);
+
+        $question_2 = Question::factory()->make([
+            'category_moodle_id' => 2,
+            'moodle_id' => 1,
+        ]);
+
+        $response = $this->postJson('api/questions', [$question_1->toArray(), $question_2->toArray()],
+            ['Authorization' => 'Bearer '.$this->token]);
+        $response->assertStatus(401);
+        $response->assertJsonStructure([
+            'error',
+        ]);
+    }
 }

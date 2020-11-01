@@ -5,12 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Resources\Category as CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        return CategoryResource::collection(Category::where('user_id', $request->user()->id)->get());
+        if($request->input('moodle_id'))
+        {
+            return new CategoryResource(Category::where([
+                ['moodle_id', $request->input('moodle_id')],
+                ['user_id', $request->user()->id]
+            ])->firstOrFail());
+        }
+        else {
+            return CategoryResource::collection(Category::where('user_id', $request->user()->id)->get());
+        }
     }
 
     public function show(Request $request, $id)
@@ -24,12 +34,32 @@ class CategoryController extends Controller
         $aux_request = $request->all();
         if(isset($aux_request['name'])) {
             $aux_request['user_id'] = $request->user()->id;
+            if(!is_null($aux_request['moodle_id']) && Category::where([
+                ['moodle_id', $aux_request['moodle_id']],
+                ['user_id', $aux_request['user_id']]
+            ])->first()) {
+                throw new HttpException(401, "Already exists.");
+            }
+            if(isset($aux_request['category_moodle_id'])) {
+                $category = Category::where([['moodle_id', $aux_request['category_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
+                $aux_request['category_id'] = $category->id;
+            }
             return Category::create($aux_request);
         }
         else {
             $categories = array();
             foreach ($aux_request as $one_request) {
                 $one_request['user_id'] = $request->user()->id;
+                if(!is_null($one_request['moodle_id']) && Category::where([
+                    ['moodle_id', $one_request['moodle_id']],
+                    ['user_id', $one_request['user_id']]
+                ])->first()) {
+                    throw new HttpException(401, "Already exists.");
+                }
+                if(isset($one_request['category_moodle_id'])) {
+                    $category = Category::where([['moodle_id', $one_request['category_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
+                    $one_request['category_id'] = $category->id;
+                }
                 $categories[] = Category::create($one_request);
             }
             return $categories;

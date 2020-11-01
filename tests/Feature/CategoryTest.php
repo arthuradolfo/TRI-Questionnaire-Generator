@@ -93,9 +93,9 @@ class CategoryTest extends TestCase
     {
         $this->getToken();
 
-        $question = Category::factory()->make();
+        $category = Category::factory()->make();
 
-        $response = $this->postJson('api/categories', $question->toArray(),
+        $response = $this->postJson('api/categories', $category->toArray(),
             ['Authorization' => 'Bearer '.$this->token]);
         $response->assertStatus(201);
         $response->assertJsonStructure([
@@ -106,7 +106,7 @@ class CategoryTest extends TestCase
         ]);
     }
 
-    public function testCreateQuestionsSuccessfully()
+    public function testCreateCategoriesSuccessfully()
     {
         $this->getToken();
 
@@ -129,9 +129,9 @@ class CategoryTest extends TestCase
 
     public function testCreateCategoryWithoutTokenFailed()
     {
-        $question = Category::factory()->make();
+        $category = Category::factory()->make();
 
-        $response = $this->postJson('api/categories', $question->toArray(),
+        $response = $this->postJson('api/categories', $category->toArray(),
             ['Authorization' => 'Bearer '.$this->token]);
         $response->assertStatus(401);
         $response->assertJson([
@@ -143,9 +143,9 @@ class CategoryTest extends TestCase
     {
         $this->getToken();
 
-        $question = Category::factory()->make();
+        $category = Category::factory()->make();
 
-        $response = $this->postJson('api/categories', $question->toArray(),
+        $response = $this->postJson('api/categories', $category->toArray(),
             ['Authorization' => 'Bearer '.$this->token]);
         $response->assertStatus(201);
         $response->assertJsonStructure([
@@ -222,6 +222,110 @@ class CategoryTest extends TestCase
         $response->assertStatus(404);
         $response->assertJson([
             'error' => 'Resource not found'
+        ]);
+    }
+
+    public function testCreateCategoryWithParentSuccessfully()
+    {
+        $this->getToken();
+
+        $category = Category::factory()->make();
+        $category->moodle_id = 1;
+
+        $response = $this->postJson('api/categories', $category->toArray(),
+            ['Authorization' => 'Bearer '.$this->token]);
+        $response->assertStatus(201);
+        $response->assertJsonStructure([
+            'id',
+            'name',
+            'info',
+            'info_format',
+            'moodle_id',
+        ]);
+
+        $category = Category::factory()->make();
+        $category->category_moodle_id = 1;
+
+        $response = $this->postJson('api/categories', $category->toArray(),
+            ['Authorization' => 'Bearer '.$this->token]);
+        $response->assertStatus(201);
+        $response->assertJsonStructure([
+            'id',
+            'name',
+            'info',
+            'info_format',
+            'moodle_id',
+        ]);
+    }
+
+    public function testCreateCategoryWithMoodleIdAlreadyExistsFailed()
+    {
+        $this->getToken();
+
+        $category = Category::factory()->make();
+        $category->moodle_id = 1;
+
+        $response = $this->postJson('api/categories', $category->toArray(),
+            ['Authorization' => 'Bearer '.$this->token]);
+        $response->assertStatus(201);
+        $response->assertJsonStructure([
+            'id',
+            'name',
+            'info',
+            'info_format',
+            'moodle_id',
+        ]);
+
+        $category = Category::factory()->make();
+        $category->moodle_id = 1;
+
+        $response = $this->postJson('api/categories', $category->toArray(),
+            ['Authorization' => 'Bearer '.$this->token]);
+        $response->assertStatus(401);
+        $response->assertJsonStructure([
+            'error',
+        ]);
+    }
+
+    public function testCreateCategoriesWithParentSuccessfully()
+    {
+        $this->getToken();
+
+        $category_1 = Category::factory()->make();
+        $category_1->moodle_id = 1;
+
+        $category_2 = Category::factory()->make();
+        $category_2->category_moodle_id = 1;
+
+        $response = $this->postJson('api/categories', [$category_1->toArray(), $category_2->toArray()],
+            ['Authorization' => 'Bearer '.$this->token]);
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            [
+                'id',
+                'name',
+                'info',
+                'info_format',
+                'moodle_id',
+            ]
+        ]);
+    }
+
+    public function testCreateCategoriesWithMoodleIdAlreadyExistsFailed()
+    {
+        $this->getToken();
+
+        $category_1 = Category::factory()->make();
+        $category_1->moodle_id = 1;
+
+        $category_2 = Category::factory()->make();
+        $category_2->moodle_id = 1;
+
+        $response = $this->postJson('api/categories', [$category_1->toArray(), $category_2->toArray()],
+            ['Authorization' => 'Bearer '.$this->token]);
+        $response->assertStatus(401);
+        $response->assertJsonStructure([
+            'error',
         ]);
     }
 }

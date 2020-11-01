@@ -29,6 +29,7 @@ class QuestionsTableSeeder extends Seeder
             'name' => $faker->name,
             'questiontext' => $faker->text,
             'questiontext_format' => 'html',
+            'moodle_id' => 2,
         ]);
 
         // And now let's generate a few dozen users for our app:
