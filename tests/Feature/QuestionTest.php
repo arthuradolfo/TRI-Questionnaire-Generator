@@ -544,4 +544,53 @@ class QuestionTest extends TestCase
             'error',
         ]);
     }
+
+    public function testGetQuestionByMoodleIdSuccessfully()
+    {
+        $this->getToken();
+
+        $response = $this->getJson('api/questions?moodle_id=2',
+            ['Authorization' => 'Bearer '.$this->token]);
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'data' => [
+                'id',
+                'category_id',
+                'type',
+                'name',
+                'questiontext',
+                'questiontext_format',
+                'generalfeedback',
+                'generalfeedback_format',
+                'defaultgrade',
+                'penalty',
+                'hidden',
+                'idnumber',
+                'single',
+                'shuffleanswers',
+                'answernumbering',
+                'showstandardinstruction',
+                'correctfeedback',
+                'correctfeedback_format',
+                'partiallycorrectfeedback',
+                'partiallycorrectfeedback_format',
+                'incorrectfeedback',
+                'incorrectfeedback_format'
+            ],
+        ]);
+    }
+
+    public function testGetQuestionByMoodleIdFailed()
+    {
+        $this->getToken();
+
+        $response = $this->getJson('api/questions?moodle_id=1',
+            ['Authorization' => 'Bearer '.$this->token]);
+
+        $response->assertStatus(404);
+        $response->assertJsonStructure([
+            'error',
+        ]);
+    }
 }

@@ -76,6 +76,35 @@ class RegisterTest extends TestCase
         ]);
     }
 
+    public function testChangePasswordValidatorFailure()
+    {
+        User::factory()->create([
+            'email' => 'test@user.com',
+            'password' => bcrypt('password'),
+        ]);
+
+        $payload = ['email' => 'test@user.com', 'password' => 'password', 'password_confirmation' => 'password'];
+
+        $response = $this->postJson('api/login', $payload);
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'token',
+        ]);
+
+        $token = $response->json('token');
+
+        $payload = ['new_password' => '1234',
+            'new_password_confirmation' => '1234'];
+
+        $response = $this->postJson('api/password', $payload, ['Authorization' => 'Bearer ' . $token]);
+
+        $response->assertStatus(422);
+        $response->assertJsonStructure([
+            'errors',
+        ]);;
+    }
+
     public function testChangePasswordSuccessfully()
     {
         User::factory()->create([

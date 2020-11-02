@@ -28,6 +28,7 @@ class AnswersTableSeeder extends Seeder
             'fraction' => 100,
             'format' => 'html',
             'text' => $faker->text,
+            'moodle_id' => 2,
         ]);
 
         Answer::create([
