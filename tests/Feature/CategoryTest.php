@@ -328,4 +328,35 @@ class CategoryTest extends TestCase
             'error',
         ]);
     }
+
+    public function testGetCategoryByMoodleIdSuccessfully()
+    {
+        $this->getToken();
+
+        $response = $this->getJson('api/categories?moodle_id=2',
+            ['Authorization' => 'Bearer '.$this->token]);
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'data' => [
+                'id',
+                'name',
+                'info',
+                'info_format',
+            ],
+        ]);
+    }
+
+    public function testGetCategoryByMoodleIdFailed()
+    {
+        $this->getToken();
+
+        $response = $this->getJson('api/categories?moodle_id=1',
+            ['Authorization' => 'Bearer '.$this->token]);
+
+        $response->assertStatus(404);
+        $response->assertJsonStructure([
+            'error',
+        ]);
+    }
 }

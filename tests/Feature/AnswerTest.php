@@ -413,4 +413,40 @@ class AnswerTest extends TestCase
             'error',
         ]);
     }
+
+    public function testGetAnswerByMoodleIdSuccessfully()
+    {
+        $this->getToken();
+
+        $response = $this->getJson('api/answers?moodle_id=2',
+            ['Authorization' => 'Bearer '.$this->token]);
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'data' => [
+                'id',
+                'question_id',
+                'fraction',
+                'format',
+                'text',
+                'feedback',
+                'feedback_format',
+                'created_at',
+                'updated_at'
+            ],
+        ]);
+    }
+
+    public function testGetAnswerByMoodleIdFailed()
+    {
+        $this->getToken();
+
+        $response = $this->getJson('api/answers?moodle_id=1',
+            ['Authorization' => 'Bearer '.$this->token]);
+
+        $response->assertStatus(404);
+        $response->assertJsonStructure([
+            'error',
+        ]);
+    }
 }
