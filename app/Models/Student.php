@@ -2,37 +2,19 @@
 
 namespace App\Models;
 
-use App\Traits\Uuid;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Passport\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
+use App\Traits\Uuid;
 
-class User extends Authenticatable
+class Student extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable, Uuid;
+    use HasFactory, Uuid;
 
     public $incrementing = false;
 
-    public function categories()
+    public function user()
     {
-        return $this->hasMany('App\Models\Category');
-    }
-
-    public function questions()
-    {
-        return $this->hasMany('App\Models\Question');
-    }
-
-    public function answers()
-    {
-        return $this->hasMany('App\Models\Answer');
-    }
-
-    public function students()
-    {
-        return $this->hasMany('App\Models\Student');
+        return $this->belongsTo('App\Models\User');
     }
 
     public function studentGrades()
@@ -47,9 +29,25 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'id',
+        'moodle_id',
+        'user_id',
         'username',
         'email',
-        'password',
+        'firstname',
+        'lastname',
+        'idnumber',
+        'institution',
+        'department',
+        'phone1',
+        'phone2',
+        'city',
+        'url',
+        'icq',
+        'skype',
+        'aim',
+        'yahoo',
+        'msn',
+        'country',
     ];
 
     /**
@@ -58,7 +56,20 @@ class User extends Authenticatable
      * @var array
      */
     protected $attributes = [
-
+        'moodle_id' => NULL,
+        'idnumber' => NULL,
+        'institution' => '',
+        'department' => '',
+        'phone1' => '',
+        'phone2' => '',
+        'city' => '',
+        'url' => '',
+        'icq' => '',
+        'skype' => '',
+        'aim' => '',
+        'yahoo' => '',
+        'msn' => '',
+        'country' => '',
     ];
 
     /**
@@ -67,8 +78,6 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password',
-        'remember_token',
     ];
 
     /**
@@ -78,6 +87,5 @@ class User extends Authenticatable
      */
     protected $casts = [
         'id' => 'string',
-        'email_verified_at' => 'datetime',
     ];
 }

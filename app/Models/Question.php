@@ -11,6 +11,26 @@ class Question extends Model
 {
     use HasFactory, Uuid, CategoryId;
 
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo('App\Models\Category');
+    }
+
+    public function answers()
+    {
+        return $this->hasMany('App\Models\Answer');
+    }
+
+    public function studentGrades()
+    {
+        return $this->hasMany('App\Models\StudentGrade');
+    }
+
     public $incrementing = false;
 
     /**

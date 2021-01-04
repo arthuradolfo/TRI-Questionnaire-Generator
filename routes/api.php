@@ -37,6 +37,20 @@ Route::middleware('auth:api')->group(function() {
 
     Route::post('/logout', 'Auth\ApiAuthController@logout')->name('logout.api');
 
+    Route::get('student_grades_output', 'StudentGradeController@output');
+
+    Route::get('student_grades', 'StudentGradeController@index');
+    Route::get('student_grades/{id}', 'StudentGradeController@show');
+    Route::post('student_grades', 'StudentGradeController@store');
+    Route::put('student_grades/{id}', 'StudentGradeController@update');
+    Route::delete('student_grades/{id}', 'StudentGradeController@delete');
+
+    Route::get('students', 'StudentController@index');
+    Route::get('students/{id}', 'StudentController@show');
+    Route::post('students', 'StudentController@store');
+    Route::put('students/{id}', 'StudentController@update');
+    Route::delete('students/{id}', 'StudentController@delete');
+
     Route::get('answers', 'AnswerController@index');
     Route::get('answers/{id}', 'AnswerController@show');
     Route::post('answers', 'AnswerController@store');

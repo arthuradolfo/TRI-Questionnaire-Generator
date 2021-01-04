@@ -13,6 +13,21 @@ class Category extends Model
 
     public $incrementing = false;
 
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
+
+    public function category()
+    {
+        return $this->hasOne('App\Models\Category');
+    }
+
+    public function questions()
+    {
+        return $this->hasMany('App\Models\Question');
+    }
+
     /**
      * The attributes that are mass assignable.
      *

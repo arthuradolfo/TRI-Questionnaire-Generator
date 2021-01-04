@@ -15,8 +15,6 @@ class ApiAuthController extends Controller
         $string_validate_rule = 'required|string|max:255';
         $validator = Validator::make($request->all(), [
             'username' => $string_validate_rule,
-            'firstname' => $string_validate_rule,
-            'lastname' => $string_validate_rule,
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:5|confirmed',
         ]);

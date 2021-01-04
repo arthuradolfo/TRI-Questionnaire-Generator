@@ -13,6 +13,16 @@ class Answer extends Model
 
     public $incrementing = false;
 
+    public function question()
+    {
+        return $this->belongsTo('App\Models\Question');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
+
     /**
      * The attributes that are mass assignable.
      *

@@ -301,7 +301,7 @@ class AnswerTest extends TestCase
         ]);
     }
 
-    public function testCreateAnswerWithCategoryMoodleIDSuccessfully()
+    public function testCreateAnswerWithQuestionMoodleIDSuccessfully()
     {
         $this->getToken();
 
@@ -362,7 +362,7 @@ class AnswerTest extends TestCase
         ]);
     }
 
-    public function testCreateAnswersWithCategoryMoodleIdSuccessfully()
+    public function testCreateAnswersWithQuestionMoodleIdSuccessfully()
     {
         $this->getToken();
 
