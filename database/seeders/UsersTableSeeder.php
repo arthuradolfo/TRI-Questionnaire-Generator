@@ -41,6 +41,13 @@ class UsersTableSeeder extends Seeder
             'password' => $password,
         ]);
 
+        User::create([
+            'id' => '91b35879-c5b1-4876-a70f-e37a79a97cbb',
+            'username' => 'admin',
+            'email' => 'admin2@test.com',
+            'password' => $password,
+        ]);
+
         // And now let's generate a few dozen users for our app:
         for ($i = 0; $i < 10; $i++) {
             User::create([

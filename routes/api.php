@@ -39,6 +39,14 @@ Route::middleware('auth:api')->group(function() {
 
     Route::get('student_grades_output', 'StudentGradeController@output');
 
+    Route::get('sessions/{id}/get_next_question', 'SessionController@get_next_question');
+
+    Route::get('sessions', 'SessionController@index');
+    Route::get('sessions/{id}', 'SessionController@show');
+    Route::post('sessions', 'SessionController@store');
+    Route::put('sessions/{id}', 'SessionController@update');
+    Route::delete('sessions/{id}', 'SessionController@delete');
+
     Route::get('student_grades', 'StudentGradeController@index');
     Route::get('student_grades/{id}', 'StudentGradeController@show');
     Route::post('student_grades', 'StudentGradeController@store');
