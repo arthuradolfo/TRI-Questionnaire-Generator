@@ -265,7 +265,7 @@ class StudentTest extends TestCase
 
     public function testGetStudentsWithOtherUser()
     {
-        $this->getToken('admin1@test.com');
+        $this->getToken('admin2@test.com');
 
         $response = $this->getJson('api/students',
             ['Authorization' => 'Bearer '.$this->token]);
@@ -281,10 +281,10 @@ class StudentTest extends TestCase
     {
         $this->getToken();
 
-        $student = Student::find('91b99879-c5b1-4876-a50f-e37a79a98cbb');
+        $student = Student::find('91c35879-c9b1-4876-a50f-e37a79a96cbb');
         $student->firstname = 'Student Updated';
 
-        $response = $this->putJson('api/students/91b99879-c5b1-4876-a50f-e37a79a98cbb', $student->toArray(),
+        $response = $this->putJson('api/students/91c35879-c9b1-4876-a50f-e37a79a96cbb', $student->toArray(),
             ['Authorization' => 'Bearer '.$this->token]);
         $response->assertStatus(200);
         $response->assertJsonStructure([
@@ -317,7 +317,7 @@ class StudentTest extends TestCase
     {
         $this->getToken('admin1@test.com');
 
-        $student = Student::find('91b99879-c5b1-4876-a50f-e37a79a98cbb');
+        $student = Student::find('91c35879-c9b1-4876-a50f-e37a79a96cbb');
         $student->firstname = 'Student Updated';
 
         $response = $this->putJson('api/students/91b99879-c5b1-4876-a50f-e37a79a98cbb', $student->toArray(),
@@ -397,7 +397,7 @@ class StudentTest extends TestCase
     {
         $this->getToken();
 
-        $response = $this->getJson('api/students?moodle_id=2',
+        $response = $this->getJson('api/students?moodle_id=3',
             ['Authorization' => 'Bearer '.$this->token]);
 
         $response->assertStatus(200);

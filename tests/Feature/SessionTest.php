@@ -173,13 +173,13 @@ class SessionTest extends TestCase
 
     }
 
-    public function testCreateAnswerWithInvalidStudentIdFailed()
+    public function testCreateSessionWithInvalidStudentIdFailed()
     {
         $this->getToken();
 
         $session = Session::factory()->make([
-            'student_id' => '91f35879-c9b1-4876-a50f-e37a79a96cbb',
-            'category_id' => '91b8106b-4280-4162-9797-d1b423236c7c',
+            'student_id' => '91f65879-c9b1-4876-a50f-e37a79a96cbb',
+            'category_id' => '91b0106b-4280-4162-9797-d1b423236c7c',
         ]);
 
         $response = $this->postJson('api/sessions', $session->toArray(),
