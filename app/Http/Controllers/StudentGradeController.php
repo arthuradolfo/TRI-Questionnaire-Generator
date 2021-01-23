@@ -38,7 +38,8 @@ class StudentGradeController extends Controller
                 $question = Question::where([['moodle_id', $aux_request['question_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
                 $aux_request['question_id'] = $question->id;
             }
-            if(StudentGrade::where([
+            if(!is_null($aux_request['student_id']) && StudentGrade::where([
+                    ['user_id', $aux_request['user_id']],
                     ['student_id', $aux_request['student_id']],
                     ['question_id', $aux_request['question_id']]
                 ])->first()) {
@@ -58,7 +59,7 @@ class StudentGradeController extends Controller
                     $question = Question::where([['moodle_id', $one_request['question_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
                     $one_request['question_id'] = $question->id;
                 }
-                if(StudentGrade::where([
+                if(!is_null($aux_request['student_id']) && StudentGrade::where([
                         ['user_id', $one_request['user_id']],
                         ['student_id', $one_request['student_id']],
                         ['question_id', $one_request['question_id']]
@@ -119,5 +120,12 @@ class StudentGradeController extends Controller
         $student_grade->delete();
 
         return response(json_encode(['message' => 'Deleted.']), 204);
+    }
+
+    public function calculate_model(Request $request)
+    {
+        echo shell_exec("Rscript ../R/model_irt.R ".$request->user()->id);
+
+        return response(json_encode(['message' => 'Calculated.']), 200);
     }
 }

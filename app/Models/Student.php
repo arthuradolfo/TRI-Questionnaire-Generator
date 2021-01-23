@@ -70,6 +70,7 @@ class Student extends Model
         'yahoo' => '',
         'msn' => '',
         'country' => '',
+        'ability' => 0
     ];
 
     /**

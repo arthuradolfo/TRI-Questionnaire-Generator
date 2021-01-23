@@ -36,6 +36,7 @@ class Student extends JsonResource
             'yahoo' => $this->yahoo,
             'msn' => $this->msn,
             'country' => $this->country,
+            'ability' => $this->ability,
             'grades' => StudentGradeResource::collection(StudentGrade::where('student_id', $this->id)->get()),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

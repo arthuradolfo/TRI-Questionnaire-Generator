@@ -21,6 +21,7 @@ class CreateStudentGradesTable extends Migration
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignUuid('student_id')
+                ->nullable()
                 ->references('id')
                 ->on('students')
                 ->cascadeOnUpdate()

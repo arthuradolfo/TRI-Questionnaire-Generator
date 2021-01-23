@@ -46,6 +46,9 @@ class CreateQuestionsTable extends Migration
             $table->string('partiallycorrectfeedback_format')->nullable();
             $table->string('incorrectfeedback')->nullable();
             $table->string('incorrectfeedback_format')->nullable();
+            $table->float('ability')->nullable();
+            $table->float('discrimination')->nullable();
+            $table->float('guess')->nullable();
             $table->timestamps();
         });
     }

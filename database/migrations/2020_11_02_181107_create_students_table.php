@@ -38,6 +38,7 @@ class CreateStudentsTable extends Migration
             $table->string('yahoo');
             $table->string('msn');
             $table->string('country');
+            $table->float('ability');
             $table->timestamps();
         });
     }

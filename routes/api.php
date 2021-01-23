@@ -47,6 +47,8 @@ Route::middleware('auth:api')->group(function() {
     Route::put('sessions/{id}', 'SessionController@update');
     Route::delete('sessions/{id}', 'SessionController@delete');
 
+    Route::get('calculate_model', 'StudentGradeController@calculate_model');
+
     Route::get('student_grades', 'StudentGradeController@index');
     Route::get('student_grades/{id}', 'StudentGradeController@show');
     Route::post('student_grades', 'StudentGradeController@store');

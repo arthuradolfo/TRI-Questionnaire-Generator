@@ -26,8 +26,8 @@ class StudentGradesTableSeeder extends Seeder
             'grade' => 5
         ]);*/
 
-        $questions = Question::where('user_id', '9278c882-b8e9-4195-866f-5864ea6fc5a1')->get();
-        $students = Student::where('user_id', '9278c882-b8e9-4195-866f-5864ea6fc5a1')->get();
+        $questions = Question::where('user_id', '9286d66a-cb25-40b0-b71a-79fb77547367')->get();
+        $students = Student::where('user_id', '9286d66a-cb25-40b0-b71a-79fb77547367')->get();
         foreach ($students as $student)
         {
             $i = 0;
@@ -46,7 +46,7 @@ class StudentGradesTableSeeder extends Seeder
                     $grade = (rand(1, 1000) <= 300) ? 0 : 1;
                 }
                 StudentGrade::create([
-                    'user_id' => '9278c882-b8e9-4195-866f-5864ea6fc5a1',
+                    'user_id' => '9286d66a-cb25-40b0-b71a-79fb77547367',
                     'student_id' => $student->id,
                     'question_id' => $question->id,
                     'grade' => $grade
