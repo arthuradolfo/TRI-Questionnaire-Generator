@@ -33,6 +33,7 @@ class CreateSessionsTable extends Migration
             $table->integer("tqg_id");
             $table->integer("number_questions");
             $table->integer("status");
+            $table->integer("last_response");
             $table->uuid('current_question')->nullable();
             $table->text("questions");
             $table->integer("questions_usage")->nullable();

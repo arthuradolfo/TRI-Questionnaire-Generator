@@ -64,7 +64,7 @@ class StudentsTableSeeder extends Seeder
             Student::create([
                 'id' => $faker->uuid,
                 'moodle_id' => $faker->randomNumber(),
-                'user_id' => '9286d66a-cb25-40b0-b71a-79fb77547367',
+                'user_id' => '9290f93c-3611-49c5-8d9b-1066179e74f1',
                 'username' => $faker->userName,
                 'firstname' => $faker->firstName,
                 'lastname' => $faker->lastName,

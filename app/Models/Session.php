@@ -47,6 +47,7 @@ class Session extends Model
         'tqg_id',
         'number_questions',
         'status',
+        'last_response',
         'current_question',
         'questions_usage',
         'slot',
@@ -62,6 +63,7 @@ class Session extends Model
      */
     protected $attributes = [
         'status' => self::STARTED,
+        'last_response' => 0,
         'current_question' => NULL,
         'questions' => ""
     ];

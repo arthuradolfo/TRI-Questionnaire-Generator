@@ -16,7 +16,7 @@ class StudentGradesTableSeeder extends Seeder
      */
     public function run()
     {
-        StudentGrade::query()->delete();
+        //StudentGrade::query()->delete();
 
         /*StudentGrade::create([
             'id' => '9cb35879-c5b1-4876-a50f-e37a79a98cbb',
@@ -26,10 +26,10 @@ class StudentGradesTableSeeder extends Seeder
             'grade' => 5
         ]);*/
 
-        $questions = Question::where('user_id', '9286d66a-cb25-40b0-b71a-79fb77547367')->get();
-        $students = Student::where('user_id', '9286d66a-cb25-40b0-b71a-79fb77547367')->get();
+        $questions = Question::where('user_id', '9290f93c-3611-49c5-8d9b-1066179e74f1')->get();
+        /*$students = Student::where('user_id', '9290f93c-3611-49c5-8d9b-1066179e74f1')->get();
         foreach ($students as $student)
-        {
+        {*/
             $i = 0;
             foreach ($questions as $question) {
                 $grade = rand(0, 1);
@@ -46,14 +46,14 @@ class StudentGradesTableSeeder extends Seeder
                     $grade = (rand(1, 1000) <= 300) ? 0 : 1;
                 }
                 StudentGrade::create([
-                    'user_id' => '9286d66a-cb25-40b0-b71a-79fb77547367',
-                    'student_id' => $student->id,
+                    'user_id' => '9290f93c-3611-49c5-8d9b-1066179e74f1',
+                    'student_id' => NULL,
                     'question_id' => $question->id,
                     'grade' => $grade
                 ]);
                 $i++;
             }
-        }
+        //}
 
     }
 }

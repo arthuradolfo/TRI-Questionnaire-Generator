@@ -31,8 +31,11 @@ class StudentGradeController extends Controller
         if(isset($aux_request['grade'])) {
             $aux_request['user_id'] = $request->user()->id;
             if(isset($aux_request['student_moodle_id'])) {
-                $student = Student::where([['moodle_id', $aux_request['student_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
-                $aux_request['student_id'] = $student->id;
+                $student = Student::where([['moodle_id', $aux_request['student_moodle_id']], ['user_id', $request->user()->id]])->first();
+                if($student !== null)
+                {
+                    $aux_request['student_id'] = $student->id;
+                }
             }
             if(isset($aux_request['question_moodle_id'])) {
                 $question = Question::where([['moodle_id', $aux_request['question_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
@@ -52,8 +55,11 @@ class StudentGradeController extends Controller
             foreach ($aux_request as $one_request) {
                 $one_request['user_id'] = $request->user()->id;
                 if(isset($one_request['student_moodle_id'])) {
-                    $student = Student::where([['moodle_id', $one_request['student_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
-                    $one_request['student_id'] = $student->id;
+                    $student = Student::where([['moodle_id', $one_request['student_moodle_id']], ['user_id', $request->user()->id]])->first();
+                    if($student !== null)
+                    {
+                        $one_request['student_id'] = $student->id;
+                    }
                 }
                 if(isset($one_request['question_moodle_id'])) {
                     $question = Question::where([['moodle_id', $one_request['question_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();

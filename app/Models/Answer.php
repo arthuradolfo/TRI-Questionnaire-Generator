@@ -34,6 +34,7 @@ class Answer extends Model
         'question_id',
         'user_id',
         'fraction',
+        'ability',
         'format',
         'text',
         'feedback',
