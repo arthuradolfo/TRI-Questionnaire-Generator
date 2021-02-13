@@ -70,6 +70,18 @@ class QuestionController extends Controller
         }
     }
 
+    public function updateBatch(Request $request)
+    {
+        $aux_request = $request->all();
+        $questions = array();
+        foreach ($aux_request as $one_request) {
+            $question = Question::where([['id', $one_request['id']], ['user_id', $request->user()->id]])->firstOrFail();
+            $question->update($one_request);
+            $questions[] = $question;
+        }
+        return $questions;
+    }
+
     public function update(Request $request, $id)
     {
         $question = Question::where([['id', $id], ['user_id', $request->user()->id]])->firstOrFail();

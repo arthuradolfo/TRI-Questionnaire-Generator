@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Question;
+use App\Models\Session;
 use App\Models\Student;
 use App\Models\StudentGrade;
 use Illuminate\Http\Request;
@@ -78,40 +79,6 @@ class StudentGradeController extends Controller
         }
     }
 
-    public function output(Request $request)
-    {
-        $students = Student::where('user_id', $request->user()->id)->get();
-        $output = "";
-        $students_array = array();
-        $itens = array();
-        $student_number = 0;
-        $item_number = 0;
-        foreach ($students as $student)
-        {
-            $student_grades = StudentGrade::where([
-                'user_id' => $request->user()->id,
-                'student_id' => $student->id
-            ])->get();
-            foreach ($student_grades as $student_grade)
-            {
-                if(!isset($students_array[$student_grade->student_id]))
-                {
-                    $students_array[$student_grade->student_id] = $student_number;
-                    $student_number++;
-                }
-                if(!isset($itens[$student_grade->question_id]))
-                {
-                    $itens[$student_grade->question_id] = $item_number;
-                    $item_number++;
-                }
-                {
-                    $output .= $students_array[$student_grade->student_id].",".$itens[$student_grade->question_id].",".$student_grade->grade."\n";
-                }
-            }
-        }
-        return $output;
-    }
-
     public function update(Request $request, $id)
     {
         $student_grade = StudentGrade::where([['id', $id], ['user_id', $request->user()->id]])->firstOrFail();
@@ -128,9 +95,10 @@ class StudentGradeController extends Controller
         return response(json_encode(['message' => 'Deleted.']), 204);
     }
 
-    public function calculate_model(Request $request)
+    public function calculate_model(Request $request, $id)
     {
-        echo shell_exec("Rscript ../R/model_irt.R ".$request->user()->id);
+        $session = Session::where('id', $id)->firstOrFail();
+        echo shell_exec("Rscript ../R/model_irt.R ".$request->user()->id." ".$session->category_id);
 
         return response(json_encode(['message' => 'Calculated.']), 200);
     }

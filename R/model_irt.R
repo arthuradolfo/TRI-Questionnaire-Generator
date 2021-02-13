@@ -8,8 +8,13 @@ con <- DBI::dbConnect(odbc::odbc(),
                  UID = "my_user",
                  PWD = "my_password",
                  Port = 3306)
-
-questions <- DBI::dbGetQuery(con, paste0("SELECT * FROM questions WHERE user_id = '", args[1], "' ORDER BY id ASC"))
+questions <- DBI::dbGetQuery(con, paste0("SELECT qt1.* FROM questions qt1
+                                          LEFT JOIN categories ct1
+                                          ON ct1.id = qt1.category_id AND (ct1.id = '", args[2], "'
+                                          OR ct1.category_id = '", args[2], "')
+                                          LEFT JOIN categories ct2
+                                          ON ct2.category_id = ct1.id OR ct2.id = ct1.id
+                                          WHERE qt1.category_id = ct2.id ORDER BY id ASC"))
 students <- DBI::dbGetQuery(con, paste0("SELECT * FROM students WHERE user_id = '", args[1], "' ORDER BY id DESC"))
 
 questions_length = length(questions[,1])
@@ -17,11 +22,24 @@ students_length = length(students[,1])
 
 dat <- array(dim = c(students_length,questions_length))
 
-grades <- DBI::dbGetQuery(con, paste0("SELECT * FROM student_grades WHERE user_id = '", args[1], "' ORDER BY question_id ASC, student_id DESC"))
+grades <- DBI::dbGetQuery(con, paste0("SELECT st1.* FROM student_grades st1
+                                       JOIN (SELECT qt1.id FROM questions qt1
+                                       LEFT JOIN categories ct1
+                                       ON ct1.id = qt1.category_id AND (ct1.id = '", args[2], "'
+                                       OR ct1.category_id = '", args[2], "')
+                                       LEFT JOIN categories ct2
+                                       ON ct2.category_id = ct1.id OR ct2.id = ct1.id
+                                       WHERE qt1.category_id = ct2.id) sel_qt
+                                       ON sel_qt.id = st1.question_id ORDER BY question_id ASC, student_id DESC"))
 grades_offset <- 0
 
 for (i in 1:questions_length) {
 	grades_length = sum(grades[,4] == questions[i,1])
+	if(grades_length == 0)
+	{
+	   print(grades_length)
+	   next
+	}
 	students_length = length(students[,1])
 	for (j in 1:grades_length)
 	{
@@ -85,3 +103,4 @@ for (i in 1:length(students[,1])) {
   query <- paste0("UPDATE students SET ability =",students_ability[i]," WHERE id='",students[i,1],"'")
   DBI::dbExecute(con, query)
 }
+

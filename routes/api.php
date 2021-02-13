@@ -47,7 +47,7 @@ Route::middleware('auth:api')->group(function() {
     Route::put('sessions/{id}', 'SessionController@update');
     Route::delete('sessions/{id}', 'SessionController@delete');
 
-    Route::get('calculate_model', 'StudentGradeController@calculate_model');
+    Route::get('calculate_model/{id}', 'StudentGradeController@calculate_model');
 
     Route::get('student_grades', 'StudentGradeController@index');
     Route::get('student_grades/{id}', 'StudentGradeController@show');
@@ -70,6 +70,7 @@ Route::middleware('auth:api')->group(function() {
     Route::get('questions', 'QuestionController@index');
     Route::get('questions/{id}', 'QuestionController@show');
     Route::post('questions', 'QuestionController@store');
+    Route::put('questions', 'QuestionController@updateBatch');
     Route::put('questions/{id}', 'QuestionController@update');
     Route::delete('questions/{id}', 'QuestionController@delete');
 
