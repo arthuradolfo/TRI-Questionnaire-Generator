@@ -35,55 +35,66 @@ grades_offset <- 0
 
 for (i in 1:questions_length) {
 	grades_length = sum(grades[,4] == questions[i,1])
-	if(grades_length == 0)
+	if(grades_length != 0)
 	{
-	   print(grades_length)
-	   next
-	}
-	students_length = length(students[,1])
-	for (j in 1:grades_length)
-	{
-		dat_length <- length(dat[,i])
-		student_number = match(grades[j+grades_offset,3], students[,1])
-		if(!is.na(student_number))
-		{
-			dat[student_number,i] = grades[j+grades_offset,5]
-		}
-		else
-		{
-			if(students_length+1 > dat_length)
-			{
-				dat <- rbind(dat, c(NA))
-				dat_length <- dat_length + 1
-			}
-			if(is.na(dat[students_length+1,i]))
-			{
-				dat[students_length+1,i] <- grades[j+grades_offset,5]
-			}
-			else
-			{
-				students_length <- students_length + 1
-				if(students_length+1 > dat_length)
-				{
-					dat <- rbind(dat, c(NA))
-					dat_length <- dat_length + 1
-				}
-				dat[students_length+1,i] <- grades[j+grades_offset,5]
-			}
-		}
-	}
-      grades_offset <- grades_offset + grades_length
+        students_length = length(students[,1])
+        for (j in 1:grades_length)
+        {
+            dat_length <- length(dat[,i])
+            student_number = match(grades[j+grades_offset,3], students[,1])
+            if(!is.na(student_number))
+            {
+                dat[student_number,i] = grades[j+grades_offset,5]
+            }
+            else
+            {
+                if(students_length+1 > dat_length)
+                {
+                    dat <- rbind(dat, c(NA))
+                    dat_length <- dat_length + 1
+                }
+                if(is.na(dat[students_length+1,i]))
+                {
+                    dat[students_length+1,i] <- grades[j+grades_offset,5]
+                }
+                else
+                {
+                    students_length <- students_length + 1
+                    if(students_length+1 > dat_length)
+                    {
+                        dat <- rbind(dat, c(NA))
+                        dat_length <- dat_length + 1
+                    }
+                    dat[students_length+1,i] <- grades[j+grades_offset,5]
+                }
+            }
+        }
+        grades_offset <- grades_offset + grades_length
+    }
 }
 dat <- provideDimnames(dat, sep = "_", base = list('student','item'))
 
+removed <- 0
 for (i in 1:questions_length)
 {
-	if( is.na(match(0, dat[,i])) || is.na(match(1, dat[,i])) )
-	{
-		dat <- dat[,-c(i)]
-		questions <- questions[-c(i),]
-		i <- i - 1
-	}
+    i <- i - removed
+    if(removed + 1 == questions_length)
+    {
+        if(is.na(match(0, dat)) || is.na(match(1, dat)))
+        {
+                dat <- NULL
+                questions <- NULL
+        }
+    }
+    else
+    {
+        if( is.na(match(0, dat[,i])) || is.na(match(1, dat[,i])) )
+        {
+            dat <- dat[,-c(i)]
+            questions <- questions[-c(i),]
+            removed <- removed + 1
+        }
+    }
 }
 
 (mmod <- mirt(dat, 1, '3PL', SE=TRUE, verbose=FALSE))
