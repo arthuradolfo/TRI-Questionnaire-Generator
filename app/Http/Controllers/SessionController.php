@@ -85,6 +85,19 @@ class SessionController extends Controller
         return response(json_encode(['message' => 'Deleted.']), 204);
     }
 
+    public function get_category_ids($category_id)
+    {
+        $category_ids = array();
+        $category_ids[] = $category_id;
+        $categories = Category::where('category_id', $category_id)->get();
+        foreach ($categories as $category)
+        {
+            $category_ids[] = $category->id;
+            $category_ids = array_merge($category_ids, $this->get_category_ids($category->id));
+        }
+        return $category_ids;
+    }
+
     public function get_next_question(Request $request, $id)
     {
         $session = Session::where([['id', $id], ['user_id', $request->user()->id]])->firstOrFail();
@@ -101,11 +114,11 @@ class SessionController extends Controller
         $student = Student::where('id', $session->student_id)->first();
         $question = Question::where(
             [
-                ['category_id', $session->category_id],
                 ['user_id', $request->user()->id],
                 ['ability', $comparison_method, $student->ability]
             ]
         )
+        ->whereIn('category_id', $this->get_category_ids($session->category_id))
         ->whereNotIn('moodle_id', explode(',', $session->questions))
         ->orderBy('ability', $order_by)->first();
 
@@ -121,10 +134,10 @@ class SessionController extends Controller
             }
             $question = Question::where(
                 [
-                    ['category_id', $session->category_id],
                     ['user_id', $request->user()->id]
                 ]
             )
+                ->whereIn('category_id', $this->get_category_ids($session->category_id))
                 ->whereNotIn('moodle_id', explode(',', $session->questions))
                 ->orderBy('ability', $order_by)->firstOrFail();
         }

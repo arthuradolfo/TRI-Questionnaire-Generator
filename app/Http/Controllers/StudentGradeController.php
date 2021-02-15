@@ -6,6 +6,7 @@ use App\Models\Question;
 use App\Models\Session;
 use App\Models\Student;
 use App\Models\StudentGrade;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\StudentGrade as StudentGradeResource;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -28,6 +29,7 @@ class StudentGradeController extends Controller
 
     public function store(Request $request)
     {
+        $user = User::where('id', $request->user()->id)->first();
         $aux_request = $request->all();
         if(isset($aux_request['grade'])) {
             $aux_request['user_id'] = $request->user()->id;
@@ -42,13 +44,16 @@ class StudentGradeController extends Controller
                 $question = Question::where([['moodle_id', $aux_request['question_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
                 $aux_request['question_id'] = $question->id;
             }
-            if(!is_null($aux_request['student_id']) && StudentGrade::where([
+            if(!is_null($aux_request['student_id']) && $student_grade = StudentGrade::where([
                     ['user_id', $aux_request['user_id']],
                     ['student_id', $aux_request['student_id']],
                     ['question_id', $aux_request['question_id']]
                 ])->first()) {
-                throw new HttpException(401, "Already exists.");
+                $student_grade->grade = ($aux_request['grade'] > $user->threshold) ? 1 : 0;
+                $student_grade->update();
+                return $student_grade;
             }
+            $aux_request['grade'] = ($aux_request['grade'] > $user->threshold) ? 1 : 0;
             return StudentGrade::create($aux_request);
         }
         else {
@@ -66,13 +71,17 @@ class StudentGradeController extends Controller
                     $question = Question::where([['moodle_id', $one_request['question_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
                     $one_request['question_id'] = $question->id;
                 }
-                if(!is_null($aux_request['student_id']) && StudentGrade::where([
+                if(!is_null($one_request['student_id']) && $student_grade = StudentGrade::where([
                         ['user_id', $one_request['user_id']],
                         ['student_id', $one_request['student_id']],
                         ['question_id', $one_request['question_id']]
                     ])->first()) {
-                    throw new HttpException(401, "Already exists.");
+                    $student_grade->grade = ($one_request['grade'] > $user->threshold) ? 1 : 0;
+                    $student_grade->update();
+                    $student_grades[] = $student_grade;
+                    continue;
                 }
+                $one_request['grade'] = ($one_request['grade'] > $user->threshold) ? 1 : 0;
                 $student_grades[] = StudentGrade::create($one_request);
             }
             return $student_grades;

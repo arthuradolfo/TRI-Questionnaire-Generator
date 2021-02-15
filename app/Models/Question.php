@@ -92,7 +92,10 @@ class Question extends Model
         'partiallycorrectfeedback' => 'Your answer is partially correct.',
         'partiallycorrectfeedback_format' => 'html',
         'incorrectfeedback' => 'Your answer is incorrect.',
-        'incorrectfeedback_format' => 'html'
+        'incorrectfeedback_format' => 'html',
+        'ability' => 0,
+        'discrimination' => 0,
+        'guess' => 0
     ];
 
     /**

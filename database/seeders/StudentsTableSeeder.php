@@ -15,7 +15,7 @@ class StudentsTableSeeder extends Seeder
      */
     public function run()
     {
-        Student::query()->delete();
+        //Student::query()->delete();
 
         /*Student::create([
             'id' => '91b99879-c5b1-4876-a50f-e37a79a98cbb',
@@ -64,7 +64,7 @@ class StudentsTableSeeder extends Seeder
             Student::create([
                 'id' => $faker->uuid,
                 'moodle_id' => $faker->randomNumber(),
-                'user_id' => '9290f93c-3611-49c5-8d9b-1066179e74f1',
+                'user_id' => '92af754d-4a8e-4549-88b3-4074a7d2282c',
                 'username' => $faker->userName,
                 'firstname' => $faker->firstName,
                 'lastname' => $faker->lastName,

@@ -41,6 +41,14 @@ Route::middleware('auth:api')->group(function() {
 
     Route::get('sessions/{id}/get_next_question', 'SessionController@get_next_question');
 
+    Route::get('question_abilities', 'QuestionAbilityController@index');
+    Route::get('question_abilities/{id}', 'QuestionAbilityController@show');
+    Route::post('question_abilities', 'QuestionAbilityController@store');
+
+    Route::get('student_abilities', 'StudentAbilityController@index');
+    Route::get('student_abilities/{id}', 'StudentAbilityController@show');
+    Route::post('student_abilities', 'StudentAbilityController@store');
+
     Route::get('sessions', 'SessionController@index');
     Route::get('sessions/{id}', 'SessionController@show');
     Route::post('sessions', 'SessionController@store');

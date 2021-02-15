@@ -50,6 +50,7 @@ class User extends Authenticatable
         'username',
         'email',
         'password',
+        'threshold',
     ];
 
     /**
@@ -58,7 +59,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $attributes = [
-
+        'threshold' => 0.7,
     ];
 
     /**

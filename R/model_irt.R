@@ -97,7 +97,7 @@ for (i in 1:questions_length)
     }
 }
 
-(mmod <- mirt(dat, 1, '3PL', SE=TRUE, verbose=FALSE))
+(mmod <- mirt(dat, 1, '3PL', SE=TRUE, verbose=FALSE, technical = list(removeEmptyRows=TRUE)))
 items <- coef(mmod, simplify=TRUE)[[1]]
 
 max_ability <- max(items[,1])
@@ -107,11 +107,14 @@ for (i in 1:length(items[,1])) {
   items[i,1] <- ((items[i,1]-min_ability) / (max_ability-min_ability))*6 - 3
   query <- paste0("UPDATE questions SET ability =",items[i,1],", discrimination=",items[i,2],", guess=",items[i,3]," WHERE id='",questions[i,1],"'")
   DBI::dbExecute(con, query)
+  query <- paste0("INSERT INTO question_ability_logs (user_id, question_id, ability, discrimination, guess, time) VALUES ('",args[1],"', '",questions[i,1],"', ",items[i,1],", ",items[i,2],", ",items[i,3],", CURRENT_TIMESTAMP)")
+  DBI::dbExecute(con, query)
 }
 
 students_ability <- fscores(mmod, theta_lim = c(-3,3))
 for (i in 1:length(students[,1])) {
   query <- paste0("UPDATE students SET ability =",students_ability[i]," WHERE id='",students[i,1],"'")
   DBI::dbExecute(con, query)
+  query <- paste0("INSERT INTO student_ability_logs (user_id, student_id, ability, time) VALUES ('",args[1],"', '",students[i,1],"', ",items[i,1],", CURRENT_TIMESTAMP)")
+  DBI::dbExecute(con, query)
 }
-
