@@ -20,6 +20,7 @@ class Session extends JsonResource
             'category_id' => $this->category_id,
             'tqg_id' => $this->tqg_id,
             'number_questions' => $this->number_questions,
+            'standard_error' => $this->standard_error,
             'status' => $this->status,
             'last_response' => $this->last_response,
             'current_question' => $this->current_question,

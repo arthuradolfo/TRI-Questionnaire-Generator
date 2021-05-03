@@ -46,6 +46,7 @@ class Session extends Model
         'category_id',
         'tqg_id',
         'number_questions',
+        'standard_error',
         'status',
         'last_response',
         'current_question',
@@ -57,7 +58,7 @@ class Session extends Model
     ];
 
     /**
-     * The attributes that should have deafault values.
+     * The attributes that should have default values.
      *
      * @var array
      */
@@ -65,7 +66,8 @@ class Session extends Model
         'status' => self::STARTED,
         'last_response' => 0,
         'current_question' => NULL,
-        'questions' => ""
+        'questions' => "",
+        'standard_error' => 0
     ];
 
     /**
