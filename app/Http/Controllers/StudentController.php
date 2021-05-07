@@ -43,7 +43,12 @@ class StudentController extends Controller
                     ['moodle_id', $aux_request['moodle_id']],
                     ['user_id', $aux_request['user_id']]
                 ])->first()) {
-                throw new HttpException(401, "Already exists.");
+                $student = Student::where([
+                    ['moodle_id', $aux_request['moodle_id']],
+                    ['user_id', $aux_request['user_id']]
+                ])->first();
+                $student->update($aux_request);
+                return $student;
             }
             return Student::create($aux_request);
         }
@@ -55,9 +60,16 @@ class StudentController extends Controller
                         ['moodle_id', $one_request['moodle_id']],
                         ['user_id', $one_request['user_id']]
                     ])->first()) {
-                    throw new HttpException(401, "Already exists.");
+                    $student = Student::where([
+                        ['moodle_id', $one_request['moodle_id']],
+                        ['user_id', $one_request['user_id']]
+                    ])->first();
+                    $student->update($one_request);
+                    $students[] = $student;
                 }
-                $students[] = Student::create($one_request);
+                else {
+                    $students[] = Student::create($one_request);
+                }
             }
             return $students;
         }

@@ -42,7 +42,12 @@ class QuestionController extends Controller
                 ['moodle_id', $aux_request['moodle_id']],
                 ['user_id', $aux_request['user_id']]
             ])->first()) {
-                throw new HttpException(401, "Already exists.");
+                $question = Question::where([
+                    ['moodle_id', $aux_request['moodle_id']],
+                    ['user_id', $aux_request['user_id']]
+                ])->first();
+                $question->update($aux_request);
+                return $question;
             }
             if(isset($aux_request['category_moodle_id'])) {
                 $category = Category::where([['moodle_id', $aux_request['category_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
@@ -58,13 +63,20 @@ class QuestionController extends Controller
                     ['moodle_id', $one_request['moodle_id']],
                     ['user_id', $one_request['user_id']]
                 ])->first()) {
-                    throw new HttpException(401, "Already exists.");
+                    $question = Question::where([
+                        ['moodle_id', $one_request['moodle_id']],
+                        ['user_id', $one_request['user_id']]
+                    ])->first();
+                    $question->update($one_request);
+                    $questions[] = $question;
                 }
-                if(isset($one_request['category_moodle_id'])) {
-                    $category = Category::where([['moodle_id', $one_request['category_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
-                    $one_request['category_id'] = $category->id;
+                else {
+                    if (isset($one_request['category_moodle_id'])) {
+                        $category = Category::where([['moodle_id', $one_request['category_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
+                        $one_request['category_id'] = $category->id;
+                    }
+                    $questions[] = Question::create($one_request);
                 }
-                $questions[] = Question::create($one_request);
             }
             return $questions;
         }

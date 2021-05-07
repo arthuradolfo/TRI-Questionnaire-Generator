@@ -38,7 +38,12 @@ class CategoryController extends Controller
                 ['moodle_id', $aux_request['moodle_id']],
                 ['user_id', $aux_request['user_id']]
             ])->first()) {
-                throw new HttpException(401, "Already exists.");
+                $category = Category::where([
+                    ['moodle_id', $aux_request['moodle_id']],
+                    ['user_id', $aux_request['user_id']]
+                ])->first();
+                $category->update($aux_request);
+                return $category;
             }
             if(isset($aux_request['category_moodle_id'])) {
                 $category = Category::where([['moodle_id', $aux_request['category_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
@@ -54,13 +59,20 @@ class CategoryController extends Controller
                     ['moodle_id', $one_request['moodle_id']],
                     ['user_id', $one_request['user_id']]
                 ])->first()) {
-                    throw new HttpException(401, "Already exists.");
+                    $category = Category::where([
+                        ['moodle_id', $one_request['moodle_id']],
+                        ['user_id', $one_request['user_id']]
+                    ])->first();
+                    $category->update($one_request);
+                    $categories[] = $category;
                 }
-                if(isset($one_request['category_moodle_id'])) {
-                    $category = Category::where([['moodle_id', $one_request['category_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
-                    $one_request['category_id'] = $category->id;
+                else {
+                    if (isset($one_request['category_moodle_id'])) {
+                        $category = Category::where([['moodle_id', $one_request['category_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
+                        $one_request['category_id'] = $category->id;
+                    }
+                    $categories[] = Category::create($one_request);
                 }
-                $categories[] = Category::create($one_request);
             }
             return $categories;
         }
