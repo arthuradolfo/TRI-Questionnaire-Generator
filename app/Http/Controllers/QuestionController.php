@@ -46,6 +46,10 @@ class QuestionController extends Controller
                     ['moodle_id', $aux_request['moodle_id']],
                     ['user_id', $aux_request['user_id']]
                 ])->first();
+                if (isset($aux_request['category_moodle_id'])) {
+                    $category = Category::where([['moodle_id', $aux_request['category_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
+                    $question->category_id = $category->id;
+                }
                 $question->update($aux_request);
                 return $question;
             }
@@ -67,6 +71,10 @@ class QuestionController extends Controller
                         ['moodle_id', $one_request['moodle_id']],
                         ['user_id', $one_request['user_id']]
                     ])->first();
+                    if (isset($one_request['category_moodle_id'])) {
+                        $category = Category::where([['moodle_id', $one_request['category_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
+                        $question->category_id = $category->id;
+                    }
                     $question->update($one_request);
                     $questions[] = $question;
                 }
