@@ -102,6 +102,14 @@ class SessionController extends Controller
                     'time' => now()
                 ]);
             }
+            else {
+                StudentAbilityLog::create([
+                    'user_id' => $request->user()->id,
+                    'student_id' => $student->id,
+                    'ability' => $student->ability,
+                    'time' => now()
+                ]);
+            }
 
             $this->calculate_standard_error($request->user()->id, $session);
 
