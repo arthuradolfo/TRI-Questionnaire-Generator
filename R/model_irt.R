@@ -75,6 +75,29 @@ for (i in 1:questions_length) {
 dat <- provideDimnames(dat, sep = "_", base = list('student','item'))
 
 removed <- 0
+for (i in 1:students_length)
+{
+    i <- i - removed
+    if (removed + 1 == students_length)
+    {
+        if(is.na(match(NA, dat)))
+        {
+                dat <- NULL
+                students <- NULL
+        }
+    }
+    else
+    {
+        if(is.na(match(NA, dat[i,])))
+        {
+                dat <- dat[-c(i),]
+                students <- students[-c(i),]
+                removed <- removed + 1
+        }
+    }
+}
+
+removed <- 0
 for (i in 1:questions_length)
 {
     i <- i - removed
@@ -121,4 +144,3 @@ if(!is.null(dat))
       DBI::dbExecute(con, query)
     }
 }
-

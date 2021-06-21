@@ -23,6 +23,9 @@ class QuestionAbilityController extends Controller
         ])->get());
     }
 
+    /**
+     * @bodyParam QuestionAbility object
+     */
     public function store(Request $request)
     {
         $aux_request = $request->all();

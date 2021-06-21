@@ -11,6 +11,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class StudentController extends Controller
 {
 
+    /**
+     * @queryParam moodle_id int
+     */
     public function index(Request $request)
     {
         if($request->input('moodle_id'))
@@ -34,6 +37,9 @@ class StudentController extends Controller
         return new StudentResource($question);
     }
 
+    /**
+     * @bodyParam Student object
+     */
     public function store(Request $request)
     {
         $aux_request = $request->all();
@@ -75,6 +81,9 @@ class StudentController extends Controller
         }
     }
 
+    /**
+     * @bodyParam Student object
+     */
     public function update(Request $request, $id)
     {
         $student = Student::where([['id', $id], ['user_id', $request->user()->id]])->firstOrFail();

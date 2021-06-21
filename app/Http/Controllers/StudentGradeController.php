@@ -27,6 +27,9 @@ class StudentGradeController extends Controller
         return new StudentGradeResource($question);
     }
 
+    /**
+     * @bodyParam StudentGrade object
+     */
     public function store(Request $request)
     {
         $user = User::where('id', $request->user()->id)->first();
@@ -88,6 +91,9 @@ class StudentGradeController extends Controller
         }
     }
 
+    /**
+     * @bodyParam Student object
+     */
     public function update(Request $request, $id)
     {
         $student_grade = StudentGrade::where([['id', $id], ['user_id', $request->user()->id]])->firstOrFail();

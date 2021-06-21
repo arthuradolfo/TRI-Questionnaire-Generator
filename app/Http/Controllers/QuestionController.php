@@ -10,6 +10,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class QuestionController extends Controller
 {
+    /**
+     * @queryParam moodle_id int
+     */
     public function index(Request $request)
     {
         if($request->input('moodle_id'))
@@ -33,6 +36,9 @@ class QuestionController extends Controller
         return new QuestionResource($question);
     }
 
+    /**
+     * @bodyParam Question object
+     */
     public function store(Request $request)
     {
         $aux_request = $request->all();
@@ -90,6 +96,9 @@ class QuestionController extends Controller
         }
     }
 
+    /**
+     * @bodyParam Questions object[]
+     */
     public function updateBatch(Request $request)
     {
         $aux_request = $request->all();
@@ -102,6 +111,9 @@ class QuestionController extends Controller
         return $questions;
     }
 
+    /**
+     * @bodyParam Question object
+     */
     public function update(Request $request, $id)
     {
         $question = Question::where([['id', $id], ['user_id', $request->user()->id]])->firstOrFail();

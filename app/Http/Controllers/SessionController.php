@@ -31,6 +31,9 @@ class SessionController extends Controller
         return new SessionResource($session);
     }
 
+    /**
+     * @bodyParam Session object
+     */
     public function store(Request $request)
     {
         $aux_request = $request->all();
@@ -76,6 +79,9 @@ class SessionController extends Controller
         }
     }
 
+    /**
+     * @bodyParam Session object
+     */
     public function update(Request $request, $id)
     {
         $session = Session::where([['id', $id], ['user_id', $request->user()->id]])->firstOrFail();

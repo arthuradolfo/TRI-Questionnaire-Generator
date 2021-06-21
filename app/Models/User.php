@@ -30,6 +30,10 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Answer');
     }
 
+    public function sessions() {
+        return $this->hasMany('App\Models\Session');
+    }
+
     public function students()
     {
         return $this->hasMany('App\Models\Student');
@@ -38,6 +42,16 @@ class User extends Authenticatable
     public function studentGrades()
     {
         return $this->hasMany('App\Models\StudentGrade');
+    }
+
+    public function questionAbilityLogs()
+    {
+        return $this->hasMany('App\Models\QuestionAbilityLog');
+    }
+
+    public function studentAbilityLogs()
+    {
+        return $this->hasMany('App\Models\StudentAbilityLog');
     }
 
     /**

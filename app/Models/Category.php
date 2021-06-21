@@ -28,6 +28,10 @@ class Category extends Model
         return $this->hasMany('App\Models\Question');
     }
 
+    public function session() {
+        return $this->belongsTo('App\Models\Session');
+    }
+
     /**
      * The attributes that are mass assignable.
      *

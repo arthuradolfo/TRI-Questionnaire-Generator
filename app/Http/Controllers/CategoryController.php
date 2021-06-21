@@ -9,6 +9,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class CategoryController extends Controller
 {
+    /**
+     * @queryParam moodle_id int
+     */
     public function index(Request $request)
     {
         if($request->input('moodle_id'))
@@ -29,6 +32,9 @@ class CategoryController extends Controller
         return new CategoryResource($category);
     }
 
+    /**
+     * @bodyParam Category object
+     */
     public function store(Request $request)
     {
         $aux_request = $request->all();
@@ -78,6 +84,9 @@ class CategoryController extends Controller
         }
     }
 
+    /**
+     * @bodyParam Category object
+     */
     public function update(Request $request, $id)
     {
         $category = Category::where([['id', $id], ['user_id', $request->user()->id]])->firstOrFail();

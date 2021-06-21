@@ -22,6 +22,9 @@ class StudentAbilityController extends Controller
         ])->get());
     }
 
+    /**
+     * @bodyParam StudentAbility object
+     */
     public function store(Request $request)
     {
         $aux_request = $request->all();

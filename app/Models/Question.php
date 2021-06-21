@@ -31,6 +31,11 @@ class Question extends Model
         return $this->hasMany('App\Models\StudentGrade');
     }
 
+    public function questionAbilityLogs()
+    {
+        return $this->hasMany('App\Models\QuestionAbilityLog');
+    }
+
     public $incrementing = false;
 
     /**

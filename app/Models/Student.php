@@ -17,9 +17,18 @@ class Student extends Model
         return $this->belongsTo('App\Models\User');
     }
 
+    public function session() {
+        return $this->belongsTo('App\Models\Session');
+    }
+
     public function studentGrades()
     {
         return $this->hasMany('App\Models\StudentGrade');
+    }
+
+    public function studentAbilityLogs()
+    {
+        return $this->hasMany('App\Models\StudentAbilityLog');
     }
 
     /**
