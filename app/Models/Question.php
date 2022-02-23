@@ -11,6 +11,31 @@ class Question extends Model
 {
     use HasFactory, Uuid, CategoryId;
 
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo('App\Models\Category');
+    }
+
+    public function answers()
+    {
+        return $this->hasMany('App\Models\Answer');
+    }
+
+    public function studentGrades()
+    {
+        return $this->hasMany('App\Models\StudentGrade');
+    }
+
+    public function questionAbilityLogs()
+    {
+        return $this->hasMany('App\Models\QuestionAbilityLog');
+    }
+
     public $incrementing = false;
 
     /**
@@ -34,6 +59,9 @@ class Question extends Model
         'hidden',
         'idnumber',
         'single',
+        'ability',
+        'discrimination',
+        'guess',
         'shuffleanswers',
         'answernumbering',
         'showstandardinstruction',
@@ -69,7 +97,10 @@ class Question extends Model
         'partiallycorrectfeedback' => 'Your answer is partially correct.',
         'partiallycorrectfeedback_format' => 'html',
         'incorrectfeedback' => 'Your answer is incorrect.',
-        'incorrectfeedback_format' => 'html'
+        'incorrectfeedback_format' => 'html',
+        'ability' => 0,
+        'discrimination' => 0,
+        'guess' => 0
     ];
 
     /**

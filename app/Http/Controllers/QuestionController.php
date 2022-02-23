@@ -10,6 +10,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class QuestionController extends Controller
 {
+    /**
+     * @queryParam moodle_id int
+     */
     public function index(Request $request)
     {
         if($request->input('moodle_id'))
@@ -33,6 +36,9 @@ class QuestionController extends Controller
         return new QuestionResource($question);
     }
 
+    /**
+     * @bodyParam Question object
+     */
     public function store(Request $request)
     {
         $aux_request = $request->all();
@@ -42,7 +48,16 @@ class QuestionController extends Controller
                 ['moodle_id', $aux_request['moodle_id']],
                 ['user_id', $aux_request['user_id']]
             ])->first()) {
-                throw new HttpException(401, "Already exists.");
+                $question = Question::where([
+                    ['moodle_id', $aux_request['moodle_id']],
+                    ['user_id', $aux_request['user_id']]
+                ])->first();
+                if (isset($aux_request['category_moodle_id'])) {
+                    $category = Category::where([['moodle_id', $aux_request['category_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
+                    $question->category_id = $category->id;
+                }
+                $question->update($aux_request);
+                return $question;
             }
             if(isset($aux_request['category_moodle_id'])) {
                 $category = Category::where([['moodle_id', $aux_request['category_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
@@ -58,18 +73,47 @@ class QuestionController extends Controller
                     ['moodle_id', $one_request['moodle_id']],
                     ['user_id', $one_request['user_id']]
                 ])->first()) {
-                    throw new HttpException(401, "Already exists.");
+                    $question = Question::where([
+                        ['moodle_id', $one_request['moodle_id']],
+                        ['user_id', $one_request['user_id']]
+                    ])->first();
+                    if (isset($one_request['category_moodle_id'])) {
+                        $category = Category::where([['moodle_id', $one_request['category_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
+                        $question->category_id = $category->id;
+                    }
+                    $question->update($one_request);
+                    $questions[] = $question;
                 }
-                if(isset($one_request['category_moodle_id'])) {
-                    $category = Category::where([['moodle_id', $one_request['category_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
-                    $one_request['category_id'] = $category->id;
+                else {
+                    if (isset($one_request['category_moodle_id'])) {
+                        $category = Category::where([['moodle_id', $one_request['category_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
+                        $one_request['category_id'] = $category->id;
+                    }
+                    $questions[] = Question::create($one_request);
                 }
-                $questions[] = Question::create($one_request);
             }
             return $questions;
         }
     }
 
+    /**
+     * @bodyParam Questions object[]
+     */
+    public function updateBatch(Request $request)
+    {
+        $aux_request = $request->all();
+        $questions = array();
+        foreach ($aux_request as $one_request) {
+            $question = Question::where([['id', $one_request['id']], ['user_id', $request->user()->id]])->firstOrFail();
+            $question->update($one_request);
+            $questions[] = $question;
+        }
+        return $questions;
+    }
+
+    /**
+     * @bodyParam Question object
+     */
     public function update(Request $request, $id)
     {
         $question = Question::where([['id', $id], ['user_id', $request->user()->id]])->firstOrFail();

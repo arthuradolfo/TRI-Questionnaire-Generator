@@ -36,6 +36,13 @@ class CategoriesTableSeeder extends Seeder
             'category_id' => '91b0106b-4280-4162-9797-d1b423236c7c',
         ]);
 
+        Category::create([
+            'id' => '91b8106b-4280-4162-9797-d1b423236c7c',
+            'user_id' => '91b35879-c5b1-4876-a50f-e37a79a97cbb',
+            'name' => $faker->name,
+            'info' => $faker->text,
+        ]);
+
         // And now let's generate a few dozen users for our app:
         /*for ($i = 0; $i < 10; $i++) {
             Category::create([

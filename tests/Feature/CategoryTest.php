@@ -177,7 +177,7 @@ class CategoryTest extends TestCase
 
     public function testGetCategoriesWithOtherUser()
     {
-        $this->getToken('admin1@test.com');
+        $this->getToken('admin2@test.com');
 
         $response = $this->getJson('api/categories',
             ['Authorization' => 'Bearer '.$this->token]);

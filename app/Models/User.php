@@ -15,6 +15,45 @@ class User extends Authenticatable
 
     public $incrementing = false;
 
+    public function categories()
+    {
+        return $this->hasMany('App\Models\Category');
+    }
+
+    public function questions()
+    {
+        return $this->hasMany('App\Models\Question');
+    }
+
+    public function answers()
+    {
+        return $this->hasMany('App\Models\Answer');
+    }
+
+    public function sessions() {
+        return $this->hasMany('App\Models\Session');
+    }
+
+    public function students()
+    {
+        return $this->hasMany('App\Models\Student');
+    }
+
+    public function studentGrades()
+    {
+        return $this->hasMany('App\Models\StudentGrade');
+    }
+
+    public function questionAbilityLogs()
+    {
+        return $this->hasMany('App\Models\QuestionAbilityLog');
+    }
+
+    public function studentAbilityLogs()
+    {
+        return $this->hasMany('App\Models\StudentAbilityLog');
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -22,25 +61,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'id',
-        'moodle_id',
         'username',
         'email',
-        'firstname',
-        'lastname',
-        'idnumber',
-        'institution',
-        'department',
-        'phone1',
-        'phone2',
-        'city',
-        'url',
-        'icq',
-        'skype',
-        'aim',
-        'yahoo',
-        'msn',
-        'country',
         'password',
+        'threshold',
     ];
 
     /**
@@ -49,20 +73,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $attributes = [
-        'moodle_id' => NULL,
-        'idnumber' => NULL,
-        'institution' => '',
-        'department' => '',
-        'phone1' => '',
-        'phone2' => '',
-        'city' => '',
-        'url' => '',
-        'icq' => '',
-        'skype' => '',
-        'aim' => '',
-        'yahoo' => '',
-        'msn' => '',
-        'country' => '',
+        'threshold' => 0.7,
     ];
 
     /**
