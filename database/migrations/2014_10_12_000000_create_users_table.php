@@ -15,26 +15,11 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
-            $table->bigInteger('moodle_id')->nullable();
             $table->string('username');
             $table->string('email')->unique();
-            $table->string('firstname');
-            $table->string('lastname');
-            $table->string('idnumber')->nullable();
-            $table->string('institution');
-            $table->string('department');
-            $table->string('phone1');
-            $table->string('phone2');
-            $table->string('city');
-            $table->string('url');
-            $table->string('icq');
-            $table->string('skype');
-            $table->string('aim');
-            $table->string('yahoo');
-            $table->string('msn');
-            $table->string('country');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->float('threshold');
             $table->rememberToken();
             $table->timestamps();
         });

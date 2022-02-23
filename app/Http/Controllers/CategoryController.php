@@ -9,6 +9,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class CategoryController extends Controller
 {
+    /**
+     * @queryParam moodle_id int
+     */
     public function index(Request $request)
     {
         if($request->input('moodle_id'))
@@ -29,6 +32,9 @@ class CategoryController extends Controller
         return new CategoryResource($category);
     }
 
+    /**
+     * @bodyParam Category object
+     */
     public function store(Request $request)
     {
         $aux_request = $request->all();
@@ -38,7 +44,12 @@ class CategoryController extends Controller
                 ['moodle_id', $aux_request['moodle_id']],
                 ['user_id', $aux_request['user_id']]
             ])->first()) {
-                throw new HttpException(401, "Already exists.");
+                $category = Category::where([
+                    ['moodle_id', $aux_request['moodle_id']],
+                    ['user_id', $aux_request['user_id']]
+                ])->first();
+                $category->update($aux_request);
+                return $category;
             }
             if(isset($aux_request['category_moodle_id'])) {
                 $category = Category::where([['moodle_id', $aux_request['category_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
@@ -54,18 +65,28 @@ class CategoryController extends Controller
                     ['moodle_id', $one_request['moodle_id']],
                     ['user_id', $one_request['user_id']]
                 ])->first()) {
-                    throw new HttpException(401, "Already exists.");
+                    $category = Category::where([
+                        ['moodle_id', $one_request['moodle_id']],
+                        ['user_id', $one_request['user_id']]
+                    ])->first();
+                    $category->update($one_request);
+                    $categories[] = $category;
                 }
-                if(isset($one_request['category_moodle_id'])) {
-                    $category = Category::where([['moodle_id', $one_request['category_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
-                    $one_request['category_id'] = $category->id;
+                else {
+                    if (isset($one_request['category_moodle_id'])) {
+                        $category = Category::where([['moodle_id', $one_request['category_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
+                        $one_request['category_id'] = $category->id;
+                    }
+                    $categories[] = Category::create($one_request);
                 }
-                $categories[] = Category::create($one_request);
             }
             return $categories;
         }
     }
 
+    /**
+     * @bodyParam Category object
+     */
     public function update(Request $request, $id)
     {
         $category = Category::where([['id', $id], ['user_id', $request->user()->id]])->firstOrFail();

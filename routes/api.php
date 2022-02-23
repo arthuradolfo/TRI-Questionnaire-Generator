@@ -37,6 +37,38 @@ Route::middleware('auth:api')->group(function() {
 
     Route::post('/logout', 'Auth\ApiAuthController@logout')->name('logout.api');
 
+    Route::get('student_grades_output', 'StudentGradeController@output');
+
+    Route::get('sessions/{id}/get_next_question', 'SessionController@get_next_question');
+
+    Route::get('question_abilities', 'QuestionAbilityController@index');
+    Route::get('question_abilities/{id}', 'QuestionAbilityController@show');
+    Route::post('question_abilities', 'QuestionAbilityController@store');
+
+    Route::get('student_abilities', 'StudentAbilityController@index');
+    Route::get('student_abilities/{id}', 'StudentAbilityController@show');
+    Route::post('student_abilities', 'StudentAbilityController@store');
+
+    Route::get('sessions', 'SessionController@index');
+    Route::get('sessions/{id}', 'SessionController@show');
+    Route::post('sessions', 'SessionController@store');
+    Route::put('sessions/{id}', 'SessionController@update');
+    Route::delete('sessions/{id}', 'SessionController@delete');
+
+    Route::get('calculate_model/{id}', 'StudentGradeController@calculate_model');
+
+    Route::get('student_grades', 'StudentGradeController@index');
+    Route::get('student_grades/{id}', 'StudentGradeController@show');
+    Route::post('student_grades', 'StudentGradeController@store');
+    Route::put('student_grades/{id}', 'StudentGradeController@update');
+    Route::delete('student_grades/{id}', 'StudentGradeController@delete');
+
+    Route::get('students', 'StudentController@index');
+    Route::get('students/{id}', 'StudentController@show');
+    Route::post('students', 'StudentController@store');
+    Route::put('students/{id}', 'StudentController@update');
+    Route::delete('students/{id}', 'StudentController@delete');
+
     Route::get('answers', 'AnswerController@index');
     Route::get('answers/{id}', 'AnswerController@show');
     Route::post('answers', 'AnswerController@store');
@@ -46,6 +78,7 @@ Route::middleware('auth:api')->group(function() {
     Route::get('questions', 'QuestionController@index');
     Route::get('questions/{id}', 'QuestionController@show');
     Route::post('questions', 'QuestionController@store');
+    Route::put('questions', 'QuestionController@updateBatch');
     Route::put('questions/{id}', 'QuestionController@update');
     Route::delete('questions/{id}', 'QuestionController@delete');
 
