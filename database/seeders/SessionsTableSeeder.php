@@ -22,8 +22,9 @@ class SessionsTableSeeder extends Seeder
         Session::create([
             'id' => '91b0106b-4280-4162-9797-d1b429236c7f',
             'user_id' => '91b35879-c5b1-4876-a50f-e37a79a98cbb',
-            'student_id' => '91c35879-c9b1-4876-a50f-e37a79a96cbb',
+            'student_id' => '91c35819-c9b1-4876-a50f-e37a79a96cbb',
             'category_id' => '91b0106b-4280-4162-9797-d1b423236c7c',
+            'current_answer_id' => NULL,
             'status' => Session::STARTED,
             'tqg_id' => 1,
             'number_questions' => 10,

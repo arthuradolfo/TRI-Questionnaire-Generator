@@ -22,7 +22,7 @@ class Session extends JsonResource
             'number_questions' => $this->number_questions,
             'standard_error' => $this->standard_error,
             'status' => $this->status,
-            'last_response' => $this->last_response,
+            'current_answer_id' => $this->current_answer_id,
             'current_question' => $this->current_question,
             'questions' => $this->questions,
             'questions_usage' => $this->questions_usage,

@@ -37,6 +37,7 @@ class Answer extends Model
         'ability',
         'format',
         'text',
+        'is_correct',
         'feedback',
         'feedback_format'
     ];

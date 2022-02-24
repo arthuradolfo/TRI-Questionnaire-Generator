@@ -23,6 +23,7 @@ class Answer extends JsonResource
             'fraction' => $this->fraction,
             'format' => $this->format,
             'text' => $this->text,
+            'is_correct' => $this->is_correct,
             'feedback' => $this->feedback,
             'feedback_format' => $this->feedback_format,
             'created_at' => $this->created_at,

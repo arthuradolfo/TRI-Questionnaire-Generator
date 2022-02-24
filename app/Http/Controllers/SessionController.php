@@ -6,6 +6,7 @@ use App\Http\Resources\Session as SessionResource;
 use App\Http\Resources\Question as QuestionResource;
 use App\Models\Category;
 use App\Models\Question;
+use App\Models\Answer;
 use App\Models\Session;
 use App\Models\Student;
 use App\Models\StudentAbilityLog;
@@ -89,7 +90,8 @@ class SessionController extends Controller
         if($session->status === Session::ANSWERED) {
             $student = Student::where('id', $session->student_id)->firstOrFail();
             $question = Question::where([['moodle_id', $session->current_question], ['user_id', $request->user()->id]])->firstOrFail();
-            if ($session->last_response == 1) {
+            $answer = Answer::where('id', $session->current_answer_id)->first();
+            if ($answer->is_correct == 1) {
                 $student->ability = $question->ability;
                 $student->update();
                 StudentAbilityLog::create([
@@ -131,10 +133,10 @@ class SessionController extends Controller
                 $student_grade->user_id = $request->user()->id;
                 $student_grade->student_id = $student->id;
                 $student_grade->question_id = $question->id;
-                $student_grade->grade = $session->last_response;
+                $student_grade->grade = $answer->is_correct;
                 $student_grade->save();
             } else {
-                $student_grade->grade = $session->last_response;
+                $student_grade->grade = $answer->is_correct;
                 $student_grade->update();
             }
         }
@@ -167,7 +169,14 @@ class SessionController extends Controller
     {
         $session = Session::where([['id', $id], ['user_id', $request->user()->id]])->firstOrFail();
         $student = Student::where('id', $session->student_id)->first();
-        $ability_threshold = self::ABILITY_THRESHOLD*(-1.1)*pow(-1, $session->last_response);
+        if (!is_null($session->current_answer_id)) {
+            $answer = Answer::where('id', $session->current_answer_id)->first();
+            $is_correct = $answer->is_correct;
+        }
+        else {
+            $is_correct = 0;
+        }
+        $ability_threshold = self::ABILITY_THRESHOLD*(-1.1)*pow(-1, $is_correct);
         $question = Question::where(
             [
                 ['user_id', $request->user()->id]
@@ -180,7 +189,7 @@ class SessionController extends Controller
 
         if(is_null($question))
         {
-            if($session->last_response == 1)
+            if($is_correct == 1)
             {
                 $order_by = "DESC";
             }

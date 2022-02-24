@@ -30,11 +30,11 @@ class CreateSessionsTable extends Migration
                 ->on('categories')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->bigInteger('current_answer_id')->nullable();
             $table->integer("tqg_id");
             $table->integer("number_questions");
             $table->float("standard_error");
             $table->integer("status");
-            $table->integer("last_response");
             $table->uuid('current_question')->nullable();
             $table->text("questions");
             $table->integer("questions_usage")->nullable();

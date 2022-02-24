@@ -48,7 +48,7 @@ class Session extends Model
         'number_questions',
         'standard_error',
         'status',
-        'last_response',
+        'current_answer_id',
         'current_question',
         'questions_usage',
         'slot',
@@ -64,7 +64,6 @@ class Session extends Model
      */
     protected $attributes = [
         'status' => self::STARTED,
-        'last_response' => 0,
         'current_question' => NULL,
         'questions' => "",
         'standard_error' => 0

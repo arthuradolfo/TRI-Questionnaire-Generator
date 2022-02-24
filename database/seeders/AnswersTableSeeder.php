@@ -26,6 +26,18 @@ class AnswersTableSeeder extends Seeder
             'question_id' => '91b0106b-4280-4162-9797-d1b429236c7c',
             'user_id' => '91b35879-c5b1-4876-a50f-e37a79a98cbb',
             'fraction' => 100,
+            'is_correct' => 1,
+            'format' => 'html',
+            'text' => $faker->text,
+            'moodle_id' => 2,
+        ]);
+
+        Answer::create([
+            'id' => '91b0106b-4280-4162-9797-d1b429236c7s',
+            'question_id' => '91b0106b-4280-4162-9797-d1b429236c7c',
+            'user_id' => '91b35879-c5b1-4876-a50f-e37a79a98cbb',
+            'fraction' => 100,
+            'is_correct' => 0,
             'format' => 'html',
             'text' => $faker->text,
             'moodle_id' => 2,
@@ -35,6 +47,7 @@ class AnswersTableSeeder extends Seeder
             'question_id' => '91b0106b-4280-4162-9797-d1b429236c7c',
             'user_id' => '91b35879-c5b1-4876-a50f-e37a79a98cbb',
             'fraction' => 100,
+            'is_correct' => 1,
             'format' => 'html',
             'text' => $faker->text,
         ]);
