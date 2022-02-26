@@ -61,7 +61,7 @@ class SessionController extends Controller
         $temp_var = 0;
         foreach (explode(',',  $session->questions) as $question_id)
         {
-            $question = Question::where([['moodle_id', $question_id], ['user_id', $user_id]])->firstOrFail();
+            $question = Question::where([['id', $question_id], ['user_id', $user_id]])->firstOrFail();
             $success = 1 / (1 + exp($question->ability - $student->ability));
             $temp_var += $success * (1 - $success);
         }
@@ -72,7 +72,7 @@ class SessionController extends Controller
     private function check_ending_condition($session)
     {
         $questions_answered = sizeof(explode(',', $session->questions));
-        if($questions_answered >= $session->number_question && $session->standar_error < self::MINIMUM_STANDARD_ERROR)
+        if($questions_answered >= $session->number_questions && $session->standard_error < self::MINIMUM_STANDARD_ERROR)
         {
             $session->time_finished = date("Y-m-d H:m:s", time());
             $session->status = Session::FINISHED;
@@ -89,7 +89,7 @@ class SessionController extends Controller
         $session->update($request->all());
         if($session->status === Session::ANSWERED) {
             $student = Student::where('id', $session->student_id)->firstOrFail();
-            $question = Question::where([['moodle_id', $session->current_question], ['user_id', $request->user()->id]])->firstOrFail();
+            $question = Question::where([['id', $session->current_question], ['user_id', $request->user()->id]])->firstOrFail();
             $answer = Answer::where('id', $session->current_answer_id)->first();
             if ($answer->is_correct == 1) {
                 $student->ability = $question->ability;
@@ -168,6 +168,12 @@ class SessionController extends Controller
     public function get_next_question(Request $request, $id)
     {
         $session = Session::where([['id', $id], ['user_id', $request->user()->id]])->firstOrFail();
+        if($session->status === Session::ASKED) {
+            return response('{"message":"You should answer the question in use first!", "error": 400}', 400); 
+        }
+        if($session->status === Session::FINISHED) {
+            return response('{"message":"This session is finished. Please create another one.", "error": 400}', 400); 
+        }
         $student = Student::where('id', $session->student_id)->first();
         if (!is_null($session->current_answer_id)) {
             $answer = Answer::where('id', $session->current_answer_id)->first();
@@ -184,7 +190,7 @@ class SessionController extends Controller
         )
         ->whereBetween('ability', [$student->ability-$ability_threshold, $student->ability+$ability_threshold])
         ->whereIn('category_id', $this->get_category_ids($session->category_id))
-        ->whereNotIn('moodle_id', explode(',', $session->questions))
+        ->whereNotIn('id', explode(',', $session->questions))
         ->orderBy('discrimination', 'DESC')->first();
 
         if(is_null($question))
@@ -203,7 +209,7 @@ class SessionController extends Controller
                 ]
             )
                 ->whereIn('category_id', $this->get_category_ids($session->category_id))
-                ->whereNotIn('moodle_id', explode(',', $session->questions))
+                ->whereNotIn('id', explode(',', $session->questions))
                 ->orderBy('ability', $order_by)->firstOrFail();
         }
 
@@ -215,6 +221,16 @@ class SessionController extends Controller
             return response('', 404);
         }
         else {
+            $session->status = Session::ASKED;
+            if(empty($session->questions))
+            {
+                $session->questions = $question->id;
+            }
+            else {
+                $session->questions .= ",".$question->id;
+            }
+            $session->current_question = $question->id;
+            $session->update();
             return new QuestionResource($question);
         }
     }
