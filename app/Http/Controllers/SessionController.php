@@ -44,23 +44,42 @@ class SessionController extends Controller
      */
     public function store(Request $request)
     {
-        $aux_request = $request->all();
-        $aux_request['user_id'] = $request->user()->id;
-        if(isset($aux_request['category_moodle_id'])) {
-            $category = Category::where([['moodle_id', $aux_request['category_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
-            $aux_request['category_id'] = $category->id;
-        }
-        if(isset($aux_request['student_moodle_id'])) {
-            $student = Student::where([['moodle_id', $aux_request['student_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
-            $aux_request['student_id'] = $student->id;
-        }
-        if(isset($aux_request['number_questions']) && $aux_request['number_questions'] < 15) {
-            $aux_request['number_questions'] = 15;
-        }
-        else if(isset($aux_request['number_questions']) && $aux_request['number_questions'] > 20) {
-            $aux_request['number_questions'] = 20;
-        }
-        return Session::create($aux_request);
+		$aux_request = $request->all();
+		if(isset($aux_request['category_id']))
+		{
+			$aux_request['user_id'] = $request->user()->id;
+			if(isset($aux_request['category_moodle_id'])) {
+				$category = Category::where([['moodle_id', $aux_request['category_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
+				$aux_request['category_id'] = $category->id;
+			}
+			if(isset($aux_request['student_moodle_id'])) {
+				$student = Student::where([['moodle_id', $aux_request['student_moodle_id']], ['user_id', $request->user()->id]])->firstOrFail();
+				$aux_request['student_id'] = $student->id;
+			}
+			if(isset($aux_request['number_questions']) && $aux_request['number_questions'] < 15) {
+				$aux_request['number_questions'] = 15;
+			}
+			else if(isset($aux_request['number_questions']) && $aux_request['number_questions'] > 20) {
+				$aux_request['number_questions'] = 20;
+			}
+			return Session::create($aux_request);
+		}
+		else
+		{
+			$sessions = array();
+			foreach ($aux_request as $one_request)
+			{
+				$one_request['user_id'] = $request->user()->id;
+				if(isset($one_request['number_questions']) && $one_request['number_questions'] < 15) {
+					$one_request['number_questions'] = 15;
+				}
+				else if(isset($one_request['number_questions']) && $one_request['number_questions'] > 20) {
+					$one_request['number_questions'] = 20;
+				}
+				$sessions[] = Session::create($one_request);
+			}
+			return $sessions;
+		}
     }
 
     private function calculate_standard_error($session) {
