@@ -14,7 +14,8 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->uuid('id')->unique()->primary();
+			$table->uuid('id')->unique()->primary();
+			$table->uuid('student_id')->index()->nullable();
             $table->string('username');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
@@ -22,7 +23,15 @@ class CreateUsersTable extends Migration
             $table->float('threshold');
             $table->rememberToken();
             $table->timestamps();
-        });
+		});
+
+		Schema::table('users', function($table) {
+			$table->foreign('student_id')
+				->references('id')
+				->on('students')
+				->cascadeOnUpdate()
+				->cascadeOnDelete();
+		});
     }
 
     /**

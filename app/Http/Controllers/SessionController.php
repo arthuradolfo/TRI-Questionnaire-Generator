@@ -20,7 +20,9 @@ class SessionController extends Controller
 
     public function index(Request $request)
     {
-        return SessionResource::collection(Session::where('user_id', $request->user()->id)->get());
+		return SessionResource::collection(Session::where('user_id', $request->user()->id)
+													->orWhere('student_id', $request->user()->student_id)
+													->get());
     }
 
     public function show(Request $request, $id)
@@ -28,7 +30,12 @@ class SessionController extends Controller
         $session = Session::where([
             ['id', $id],
             ['user_id', $request->user()->id]
-        ])->firstOrFail();
+		])
+		->orWhere([
+			['id', $id],
+			['student_id', $request->user()->student_id]
+		])
+		->firstOrFail();
         return new SessionResource($session);
     }
 
@@ -56,12 +63,12 @@ class SessionController extends Controller
         return Session::create($aux_request);
     }
 
-    private function calculate_standard_error($user_id, $session) {
+    private function calculate_standard_error($session) {
         $student = Student::where('id', $session->student_id)->firstOrFail();
         $temp_var = 0;
         foreach (explode(',',  $session->questions) as $question_id)
         {
-            $question = Question::where([['id', $question_id], ['user_id', $user_id]])->firstOrFail();
+            $question = Question::where('id', $question_id)->firstOrFail();
             $success = 1 / (1 + exp($question->ability - $student->ability));
             $temp_var += $success * (1 - $success);
         }
@@ -85,17 +92,19 @@ class SessionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $session = Session::where([['id', $id], ['user_id', $request->user()->id]])->firstOrFail();
+		$session = Session::where([['id', $id], ['user_id', $request->user()->id]])
+							->orWhere([['id', $id], ['student_id', $request->user()->student_id]])
+							->firstOrFail();
         $session->update($request->all());
         if($session->status === Session::ANSWERED) {
             $student = Student::where('id', $session->student_id)->firstOrFail();
-            $question = Question::where([['id', $session->current_question], ['user_id', $request->user()->id]])->firstOrFail();
+            $question = Question::where('id', $session->current_question)->firstOrFail();
             $answer = Answer::where('id', $session->current_answer_id)->first();
             if ($answer->is_correct == 1) {
                 $student->ability = $question->ability;
                 $student->update();
                 StudentAbilityLog::create([
-                    'user_id' => $request->user()->id,
+                    'user_id' => $session->user_id,
                     'student_id' => $student->id,
                     'ability' => $student->ability,
                     'time' => now()
@@ -104,7 +113,7 @@ class SessionController extends Controller
                 $student->ability = $question->ability;
                 $student->update();
                 StudentAbilityLog::create([
-                    'user_id' => $request->user()->id,
+                    'user_id' => $request->user_id,
                     'student_id' => $student->id,
                     'ability' => $student->ability,
                     'time' => now()
@@ -112,25 +121,25 @@ class SessionController extends Controller
             }
             else {
                 StudentAbilityLog::create([
-                    'user_id' => $request->user()->id,
+                    'user_id' => $request->user_id,
                     'student_id' => $student->id,
                     'ability' => $student->ability,
                     'time' => now()
                 ]);
             }
 
-            $this->calculate_standard_error($request->user()->id, $session);
+            $this->calculate_standard_error($session);
 
             $this->check_ending_condition($session);
 
             $student_grade = StudentGrade::where([
                 ['student_id', $student->id],
                 ['question_id', $question->id],
-                ['user_id', $request->user()->id]
+                ['user_id', $session->user_id]
             ])->first();
             if ($student_grade === null) {
                 $student_grade = new StudentGrade();
-                $student_grade->user_id = $request->user()->id;
+                $student_grade->user_id = $session->user_id;
                 $student_grade->student_id = $student->id;
                 $student_grade->question_id = $question->id;
                 $student_grade->grade = $answer->is_correct;
@@ -167,7 +176,9 @@ class SessionController extends Controller
 
     public function get_next_question(Request $request, $id)
     {
-        $session = Session::where([['id', $id], ['user_id', $request->user()->id]])->firstOrFail();
+		$session = Session::where([['id', $id], ['user_id', $request->user()->id]])
+							->orWhere([['id', $id], ['student_id', $request->user()->student_id]])
+							->firstOrFail();
         if($session->status === Session::ASKED) {
             return response('{"message":"You should answer the question in use first!", "error": 400}', 400); 
         }
@@ -185,7 +196,7 @@ class SessionController extends Controller
         $ability_threshold = self::ABILITY_THRESHOLD*(-1.1)*pow(-1, $is_correct);
         $question = Question::where(
             [
-                ['user_id', $request->user()->id]
+                ['user_id', $session->user_id]
             ]
         )
         ->whereBetween('ability', [$student->ability-$ability_threshold, $student->ability+$ability_threshold])
@@ -205,7 +216,7 @@ class SessionController extends Controller
             }
             $question = Question::where(
                 [
-                    ['user_id', $request->user()->id]
+                    ['user_id', $session->user_id]
                 ]
             )
                 ->whereIn('category_id', $this->get_category_ids($session->category_id))

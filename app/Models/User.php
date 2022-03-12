@@ -60,7 +60,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id',
+		'id',
+		'student_id',
         'username',
         'email',
         'password',
@@ -73,7 +74,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $attributes = [
-        'threshold' => 0.7,
+		'threshold' => 0.7,
+		'student_id' => null,
     ];
 
     /**
@@ -92,7 +94,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'id' => 'string',
+		'id' => 'string',
         'email_verified_at' => 'datetime',
     ];
 }
