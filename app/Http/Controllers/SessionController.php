@@ -264,4 +264,17 @@ class SessionController extends Controller
             return new QuestionResource($question);
         }
     }
+
+    public function get_current_question(Request $request, $id)
+    {
+		$session = Session::where([['id', $id], ['user_id', $request->user()->id]])
+							->orWhere([['id', $id], ['student_id', $request->user()->student_id]])
+							->firstOrFail();
+        $question = Question::where(
+            [
+                ['id', $session->current_question]
+            ]
+        )
+        return new QuestionResource($question);
+    }
 }

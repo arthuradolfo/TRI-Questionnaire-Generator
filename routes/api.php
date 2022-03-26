@@ -40,6 +40,7 @@ Route::middleware('auth:api')->group(function() {
     Route::get('student_grades_output', 'StudentGradeController@output');
 
     Route::get('sessions/{id}/get_next_question', 'SessionController@get_next_question');
+    Route::get('sessions/{id}/get_current_question', 'SessionController@get_current_question');
 
     Route::get('question_abilities', 'QuestionAbilityController@index');
     Route::get('question_abilities/{id}', 'QuestionAbilityController@show');
