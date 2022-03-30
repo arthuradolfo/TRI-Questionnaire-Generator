@@ -132,7 +132,7 @@ class SessionController extends Controller
                 $student->ability = $question->ability;
                 $student->update();
                 StudentAbilityLog::create([
-                    'user_id' => $request->user_id,
+                    'user_id' => $session->user_id,
                     'student_id' => $student->id,
                     'ability' => $student->ability,
                     'time' => now()
@@ -140,7 +140,7 @@ class SessionController extends Controller
             }
             else {
                 StudentAbilityLog::create([
-                    'user_id' => $request->user_id,
+                    'user_id' => $session->user_id,
                     'student_id' => $student->id,
                     'ability' => $student->ability,
                     'time' => now()
