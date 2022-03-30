@@ -274,7 +274,7 @@ class SessionController extends Controller
             [
                 ['id', $session->current_question]
             ]
-        );
+        )->firstOrFail();
         return new QuestionResource($question);
     }
 }
