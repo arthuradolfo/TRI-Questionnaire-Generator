@@ -203,7 +203,11 @@ class SessionController extends Controller
         }
         if($session->status === Session::FINISHED) {
             return response('{"message":"This session is finished. Please create another one.", "error": 400}', 400); 
-        }
+		}
+		
+		$session->status = Session::FINISHED;
+		$session->update();
+
         $student = Student::where('id', $session->student_id)->first();
         if (!is_null($session->current_answer_id)) {
             $answer = Answer::where('id', $session->current_answer_id)->first();
